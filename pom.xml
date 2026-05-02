@@ -4,18 +4,17 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.lessons</groupId>
-  <artifactId>placeRL</artifactId>
+  <artifactId>convoke</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <modules>
     <module>frontend</module>
     <module>backend</module>
     <module>db-migrations</module>
-    <module>common-backend</module>
   </modules>
 
 
-  <name>placeRL</name>
+  <name>convoke</name>
 
   <packaging>pom</packaging>
 

@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>placeRL</artifactId>
+    <artifactId>convoke</artifactId>
     <groupId>com.lessons</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
@@ -195,13 +195,6 @@
       <groupId>com.ning</groupId>
       <artifactId>async-http-client</artifactId>
       <version>1.9.40</version>
-    </dependency>
-
-    <dependency>
-      <!-- Add common backend as a dependency -->
-      <groupId>${project.groupId}</groupId>
-      <artifactId>common-backend</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>

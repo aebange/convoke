@@ -1,4 +1,4 @@
-name: Build and Deploy PlaceRL
+name: Build and Deploy Convoke
 
 on:
   push:
@@ -43,7 +43,7 @@ jobs:
         echo "jar-path=$JAR_FILE" >> $GITHUB_OUTPUT
         echo "jar-name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
     
-    - name: Stop PlaceRL service
+    - name: Stop Convoke service
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.SERVER_HOST }}
@@ -51,12 +51,12 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
-          echo "Stopping PlaceRL service..."
-          sudo systemctl stop placerl
+          echo "Stopping Convoke service..."
+          sudo systemctl stop convoke
           
           # Create backup of current jar (optional but recommended)
-          if [ -f /opt/placerl/backend-1.0-SNAPSHOT-exec.jar ]; then
-            sudo cp /opt/placerl/backend-1.0-SNAPSHOT-exec.jar /opt/placerl/backend-1.0-SNAPSHOT-exec.jar.backup.$(date +%Y%m%d_%H%M%S)
+          if [ -f /opt/convoke/backend-1.0-SNAPSHOT-exec.jar ]; then
+            sudo cp /opt/convoke/backend-1.0-SNAPSHOT-exec.jar /opt/convoke/backend-1.0-SNAPSHOT-exec.jar.backup.$(date +%Y%m%d_%H%M%S)
             echo "Created backup of existing jar"
           fi
     
@@ -80,23 +80,23 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           # Move jar from temp location to final destination
-          sudo mv /tmp/${{ steps.jar-info.outputs.jar-name }} /opt/placerl/
+          sudo mv /tmp/${{ steps.jar-info.outputs.jar-name }} /opt/convoke/
           
           # Change ownership to deployuser (the user that runs the service)
-          sudo chown deployuser:deployuser /opt/placerl/${{ steps.jar-info.outputs.jar-name }}
-          sudo chmod 755 /opt/placerl/${{ steps.jar-info.outputs.jar-name }}
+          sudo chown deployuser:deployuser /opt/convoke/${{ steps.jar-info.outputs.jar-name }}
+          sudo chmod 755 /opt/convoke/${{ steps.jar-info.outputs.jar-name }}
           
-          echo "Starting PlaceRL service..."
-          sudo systemctl start placerl
+          echo "Starting Convoke service..."
+          sudo systemctl start convoke
           
           # Wait a moment and check if service started successfully
           sleep 5
-          if sudo systemctl is-active --quiet placerl; then
-            echo "✅ PlaceRL service started successfully"
-            sudo systemctl status placerl --no-pager -l
+          if sudo systemctl is-active --quiet convoke; then
+            echo "✅ Convoke service started successfully"
+            sudo systemctl status convoke --no-pager -l
           else
-            echo "❌ PlaceRL service failed to start"
-            sudo systemctl status placerl --no-pager -l
+            echo "❌ Convoke service failed to start"
+            sudo systemctl status convoke --no-pager -l
             exit 1
           fi
     
@@ -109,6 +109,6 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
           # Keep only the 5 most recent backup files
-          cd /opt/placerl
+          cd /opt/convoke
           sudo find . -name "*.jar.backup.*" -type f | sort -r | tail -n +6 | sudo xargs rm -f
           echo "Cleaned up old backup files"

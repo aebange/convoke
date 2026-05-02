@@ -4,8 +4,8 @@
 # Filename:  application-dev.yaml
 # Purpose:   Set the dev profile for testing with a local database and hard-coded credentials
 #################################################################################################
-name: placerl
-server.servlet.context-path: /placerl
+name: convoke
+server.servlet.context-path: /convoke
 server.port: 8080
 
 
@@ -29,12 +29,12 @@ authenticate.set_last_login_date.is_enabled: false
 app.datasource:
   enabled: true
   driver-class-name: org.postgresql.Driver
-  url: jdbc:postgresql://localhost:5432/placerl_db
-  username: placerl_user
+  url: jdbc:postgresql://localhost:5432/convoke_db
+  username: convoke_user
   password: secret
-  schema: placerl_db
+  schema: convoke_db
   maxPoolSize: 5
-  database-name: placerl_db
+  database-name: convoke_db
   flyway-migrate-on-startup: true
   flyway-clean-on-startup: false  # THIS WILL NUKE THE DATABASE IF TRUE!!!!!!!!!!!!
 
@@ -78,7 +78,7 @@ spring.servlet.multipart.max-request-size: 400MB
 ##########################################################
 # Document Settings
 ##########################################################
-root.dir: c:/temp/placerl
+root.dir: c:/temp/convoke
 uploads.dir: ${root.dir}/uploads
 s3.enabled: false
 

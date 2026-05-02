@@ -1,8 +1,8 @@
 ﻿# === CONFIGURATION ===
 $VpsUser = "deployuser"
 $VpsHost = "5.75.238.240"
-$SshKey = "C:\tools\Certificates-Keys\placerl-key"
-$RemoteDir = "/opt/placerl"
+$SshKey = "C:\tools\Certificates-Keys\convoke-key"
+$RemoteDir = "/opt/convoke"
 
 # === PRE-CHECK ===
 if (-not (Test-Path $SshKey)) {

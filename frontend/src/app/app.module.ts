@@ -32,15 +32,14 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {AgGridModule} from "ag-grid-angular";
 import {ErrorDialogComponent} from "./errorHandler/error-dialog/error-dialog.component";
-import { HubComponent } from './features/hub/hub.component';
 import { ShortNumberPipe } from './utilities/short-number.pipe';
 import { DateFormatPipe } from './utilities/date-format.pipe';
-import { PlaceCardComponent } from './features/place-card/place-card.component';
+import { JoinComponent } from './features/join/join.component';
 
 // Set up the routes.  If no route is found, then take the user to the NotFoundComponent
 // NOTE:  The **ORDER** of these routes matters.  The NotFoundComponent should always be last
 const appRoutes: Routes = [
-  { path:  '',                                component: HubComponent, },
+  { path:  '',                                component: JoinComponent, },
   { path:  '**',                              component: NotFoundComponent }
 ];
 
@@ -48,10 +47,9 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     ErrorDialogComponent,
-    HubComponent,
     ShortNumberPipe,
     DateFormatPipe,
-    PlaceCardComponent,
+    JoinComponent,
   ],
   imports: [
     AgGridModule,

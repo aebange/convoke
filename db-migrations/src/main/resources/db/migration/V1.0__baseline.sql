@@ -39,29 +39,4 @@ comment on table exceptions is 'The Exceptions table holds information about exc
 
 -- Add an index so that filtering on this table by event_date runs faster
 create index on exceptions(event_date);
-
-
-
------------------------------------------------------------------------------
--- Create this table:  places
------------------------------------------------------------------------------
-CREATE TABLE places
-(
-    id             BIGINT    NOT NULL,
-    created        TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated        TIMESTAMP NOT NULL DEFAULT NOW(),
-    server_size    INTEGER,
-    visits         BIGINT,
-    favorites      BIGINT,
-    active         BOOLEAN DEFAULT TRUE,
-    likes          BIGINT,
-    dislikes       BIGINT,
-    description    VARCHAR,
-    thumbnail_url  VARCHAR,
-    creator_userid BIGINT,
-    title          VARCHAR,
-    maturity_id    INTEGER,
-    genre_id       INTEGER,
-    PRIMARY KEY(id)
-);
-comment on table places is 'The places table holds information about places to be served to users';
+;
