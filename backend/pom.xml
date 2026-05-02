@@ -198,13 +198,6 @@
     </dependency>
 
     <dependency>
-      <!-- Add common backend as a dependency -->
-      <groupId>${project.groupId}</groupId>
-      <artifactId>common-backend</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <dependency>
       <!-- Add wrapper to invoke virus-scanning with clamAV -->
       <groupId>com.eurodyn.qlack.util</groupId>
       <artifactId>qlack-util-clam-av</artifactId>
