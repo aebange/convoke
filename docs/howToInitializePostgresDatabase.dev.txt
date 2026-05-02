@@ -1,0 +1,24 @@
+How to Initialize the PlaceRL Postgres Database
+---------------------------=-----------------
+NOTE:  The flyway scripts cannot create a database
+       Someone *must* create an empty database first
+
+
+Procedure
+---------
+ 1. Create the placerl_db and placerl_user
+    unix> psql -U postgres -h localhost
+
+          create database placerl_db;
+          create user placerl_user with password 'secret';
+          grant all privileges on database placerl_db to placerl_user;
+          alter database placerl_db     SET search_path=placerl_db;
+          alter role     placerl_user   SET search_path=placerl_db;
+          \q
+
+ 2. Create the placerl_db schema
+    unix> psql -U placerl_user -d placerl_db -h localhost
+    password:
+
+      create schema placerl_db;
+      \q

@@ -1,0 +1,73 @@
+
+############################################################
+# Filename .gitignore
+#
+# How to reproduce
+#   1) Go to https://www.gitignore.io/
+#   2) Enter the name of your IDE:  intellij
+#   3) Press Generate
+#
+# Purpose
+#   Tell Git which files and directories to ignore
+#
+# Created by using https://www.gitignore.io/api/intellij
+# And, then modified by me
+############################################################
+
+### Ignore Intellij specific files ###
+.idea/*
+*.iml
+
+## File-based project format:
+*.iws
+
+## Ignore compiled files in the target directory
+/target/
+
+## Ignore node_modules directory
+frontend/node_modules/*
+frontend/node/*
+frontend/target/*
+frontend/.angular/*
+frontend/.vscode/*
+
+
+# Ignore frontend/dist directory
+frontend/dist/*
+
+# Ignore the target directories
+backend/target/*
+common-backend/target/*
+db-migrations/target/*
+sync-service/target/*
+
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db

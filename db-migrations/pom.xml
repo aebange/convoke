@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.lessons</groupId>
+        <artifactId>placeRL</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>db-migrations</artifactId>
+
+    <name>db-migrations</name>
+
+    <dependencies>
+
+        <dependency>
+            <!-- Database Driver that flyway-maven-plugin uses to talk to the database -->
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.5.4</version>
+        </dependency>
+
+    </dependencies>
+
+    <properties>
+        <!-- Allow flyway:clean to actually erase the database -->
+        <flyway.cleanDisabled>false</flyway.cleanDisabled>
+    </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>6.5.7</version>
+
+                <configuration>
+                    <!-- Set the postgres credentials when running mvn flyway:migrate from command-line -->
+                    <user>placerl_user</user>
+                    <password>secret</password>
+                    <url>jdbc:postgresql://localhost:5432/placerl_db</url>
+                    <schemas>placerl_db</schemas>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="1. Back-End" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="backend" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.lessons.Application" />
+    <option name="VM_PARAMETERS" value="-Dapp.datasource.flyway-migrate-on-startup=TRUE -Dapp.datasource.flyway-clean-on-startup=FALSE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -1,0 +1,81 @@
+/* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  touch-action: manipulation;
+}
+
+html, body {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  font-family: BuilderSans;
+}
+
+.full-height {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Define @font-face rules for each weight and style for Builder Sans */
+/* BuilderSans Font Family Declarations */
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 100;
+  src: url('assets/fonts/BuilderSans/BuilderSans-Thin-100.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 300;
+  src: url('assets/fonts/BuilderSans/BuilderSans-Light-300.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('assets/fonts/BuilderSans/BuilderSans-Regular-400.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 500;
+  src: url('assets/fonts/BuilderSans/BuilderSans-Medium-500.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 600;
+  src: url('assets/fonts/BuilderSans/BuilderSans-SemiBold-600.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 700;
+  src: url('assets/fonts/BuilderSans/BuilderSans-Bold-700.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'BuilderSans';
+  font-style: normal;
+  font-weight: 800;
+  src: url('assets/fonts/BuilderSans/BuilderSans-ExtraBold-800.otf') format('opentype');
+}
+
+.clickable {
+  cursor: pointer;
+}

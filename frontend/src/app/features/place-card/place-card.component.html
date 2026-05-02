@@ -1,0 +1,73 @@
+<div class="h-full w-full flex flex-col">
+	<!-- Thumbnail -->
+	<div class="h-[28.33%] w-[250px] sm:w-[302px] flex flex-shrink-0 relative">
+		<img src="{{this.card.thumbnail_url}}">
+		<div class="flex absolute top-1.5 right-1.5 opacity-80 hover:opacity-100 transition-opacity duration-300">
+			<a class="flex bg-blue-500 h-6 w-6 rounded-full flex-shrink-0 items-center justify-center clickable"
+			   [href]="'https://www.roblox.com/games/' + this.card.id" target="_blank" rel="noopener">
+				<i class="fa-solid fa-link text-white text-sm"></i>
+			</a>
+		</div>
+	</div>
+
+	<!-- Title -->
+	<div class="w-full px-3 h-[8%] flex-shrink-0 text-3xl font-extrabold max-w-full truncate mb-1">
+		<span>{{ this.card.title }}</span>
+	</div>
+
+	<!-- Description -->
+	<div class="w-full px-3 h-[13%] flex-shrink-0">
+		<span class="line-clamp-3">{{ this.card.description }}</span>
+	</div>
+
+	<!-- Play Button (Behave like a link but open in new tab) -->
+	<a class="flex px-3 pt-3 h-[84px] flex-shrink-0" (click)="this.openGame()"
+	   [href]="'https://www.roblox.com/games/start?placeId=' + this.card.id"
+	   target="_blank"
+	   rel="noopener">
+		<button class="flex w-[300px] h-[60px] bg-blue-400 rounded-lg">
+			<i class="fa-play fa-solid text-white text-4xl mx-auto my-auto"></i>
+		</button>
+	</a>
+
+	<!-- Stats -->
+	<div class="grid grid-cols-2 gap-1 px-3 pb-3 w-full h-full">
+
+		<!-- First Column -->
+		<div class="flex flex-col h-full w-full gap-1 text-md">
+			<div class="flex flex-col w-full h-full items-center rounded-lg justify-center"
+			     [style.background-color]="this.getColorScaleHex(this.card.visits)">
+				<i class="fa-solid fa-eye"></i>
+				<span>{{ this.card.visits | shortNumber }}</span>
+			</div>
+			<div class="bg-gray-100 flex flex-col w-full h-full items-center rounded-lg justify-center"
+			     [style.background-color]="this.getColorScaleHex(this.card.visits)">
+				<i class="fa-solid fa-star"></i>
+				<span>{{ this.card.favorites | shortNumber }}</span>
+			</div>
+			<div class="bg-gray-100 flex flex-col w-full h-full items-center rounded-lg justify-center"
+			     [style.background-color]="this.getColorScaleHex(this.card.visits)">
+				<i class="fa-solid fa-thumbs-up"></i>
+				<span>{{ this.card.likes | shortNumber }}</span>
+			</div>
+		</div>
+
+		<!-- Second Column-->
+		<div class="flex flex-col h-full w-full gap-1 text-md">
+			<div class="bg-gray-100 flex flex-col w-full h-full items-center rounded-lg justify-center">
+				<i class="fa-solid fa-calendar-plus"></i>
+				<span>{{ this.card.created | dateFormat }}</span>
+			</div>
+			<div class="bg-gray-100 flex flex-col w-full h-full items-center rounded-lg justify-center">
+				<i class="fa-solid fa-calendar-arrow-up "></i>
+				<span>{{ this.card.updated | dateFormat }}</span>
+			</div>
+			<div class="bg-gray-100 flex flex-col w-full h-full items-center rounded-lg justify-center"
+			     [style.background-color]="this.getColorScaleHex(this.card.visits)">
+				<i class="fa-solid fa-thumbs-down"></i>
+				<span>{{ this.card.dislikes | shortNumber }}</span>
+			</div>
+		</div>
+	</div>
+
+</div>

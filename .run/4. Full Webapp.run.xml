@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="4. Full Webapp" type="Multirun" separateTabs="false" reuseTabsWithFailures="true" startOneByOne="true" markFailedProcess="false" hideSuccessProcess="false" delayTime="1.0">
+    <runConfiguration name="1. Back-End" type="Spring Boot" />
+    <runConfiguration name="2. Front-End" type="npm" />
+    <runConfiguration name="3. Chrome-debugger" type="JavaScript Debug" />
+    <method v="2" />
+  </configuration>
+</component>

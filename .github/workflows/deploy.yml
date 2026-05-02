@@ -1,0 +1,114 @@
+name: Build and Deploy PlaceRL
+
+on:
+  push:
+    branches: [ development ]  # Adjust to your main branch name
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.17.0'  # Matches your frontend pom.xml
+        cache: 'npm'
+        cache-dependency-path: 'frontend/package-lock.json'
+    
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+    
+    - name: Build with Maven
+      run: mvn clean package -Pprod --batch-mode --update-snapshots
+    
+    - name: Get jar filename
+      id: jar-info
+      run: |
+        JAR_FILE=$(find backend/target -name "*-exec.jar" -type f)
+        echo "jar-path=$JAR_FILE" >> $GITHUB_OUTPUT
+        echo "jar-name=$(basename $JAR_FILE)" >> $GITHUB_OUTPUT
+    
+    - name: Stop PlaceRL service
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        script: |
+          echo "Stopping PlaceRL service..."
+          sudo systemctl stop placerl
+          
+          # Create backup of current jar (optional but recommended)
+          if [ -f /opt/placerl/backend-1.0-SNAPSHOT-exec.jar ]; then
+            sudo cp /opt/placerl/backend-1.0-SNAPSHOT-exec.jar /opt/placerl/backend-1.0-SNAPSHOT-exec.jar.backup.$(date +%Y%m%d_%H%M%S)
+            echo "Created backup of existing jar"
+          fi
+    
+    - name: Deploy jar to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        source: ${{ steps.jar-info.outputs.jar-path }}
+        target: /tmp/
+        strip_components: 2  # Removes 'backend/target/' from path
+    
+    - name: Move jar and restart service
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        script: |
+          # Move jar from temp location to final destination
+          sudo mv /tmp/${{ steps.jar-info.outputs.jar-name }} /opt/placerl/
+          
+          # Change ownership to deployuser (the user that runs the service)
+          sudo chown deployuser:deployuser /opt/placerl/${{ steps.jar-info.outputs.jar-name }}
+          sudo chmod 755 /opt/placerl/${{ steps.jar-info.outputs.jar-name }}
+          
+          echo "Starting PlaceRL service..."
+          sudo systemctl start placerl
+          
+          # Wait a moment and check if service started successfully
+          sleep 5
+          if sudo systemctl is-active --quiet placerl; then
+            echo "✅ PlaceRL service started successfully"
+            sudo systemctl status placerl --no-pager -l
+          else
+            echo "❌ PlaceRL service failed to start"
+            sudo systemctl status placerl --no-pager -l
+            exit 1
+          fi
+    
+    - name: Cleanup old backups (keep last 5)
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        script: |
+          # Keep only the 5 most recent backup files
+          cd /opt/placerl
+          sudo find . -name "*.jar.backup.*" -type f | sort -r | tail -n +6 | sudo xargs rm -f
+          echo "Cleaned up old backup files"
