@@ -65,9 +65,9 @@ your shell before running. Do not commit real credentials to the repository.
 
 | Variable                  | Description                        | Example                                      |
 |---------------------------|------------------------------------|----------------------------------------------|
-| `DB_URL`                  | JDBC connection URL                | `jdbc:postgresql://localhost:5432/convoke`   |
-| `DB_USERNAME`             | Database username                  | `convoke_user`                               |
-| `DB_PASSWORD`             | Database password                  | `changeme`                                   |
+| `DB_URL`                  | JDBC connection URL                | `jdbc:postgresql://localhost:5432/convoke_db` |
+| `DB_USERNAME`             | Database username                  | `convoke_user`                                |
+| `DB_PASSWORD`             | Database password                  | `secret`                                      |
 | `SERVER_PORT`             | Port the app listens on            | `8080`                                       |
 | `CONVOKE_CONTEXT_PATH`    | App context path                   | `/convoke`                                   |
 
@@ -75,15 +75,38 @@ your shell before running. Do not commit real credentials to the repository.
 
 ## Database Setup
 
-1. Create a PostgreSQL database and user:
+**1. Open a psql session as the postgres superuser:**
 
-```sql
-CREATE DATABASE convoke;
-CREATE USER convoke_user WITH PASSWORD 'changeme';
-GRANT ALL PRIVILEGES ON DATABASE convoke TO convoke_user;
+Windows:
+```cmd
+psql -U postgres
 ```
 
-2. Flyway migrations run automatically on startup and will build the full schema.
+Unix:
+```bash
+sudo -u postgres psql
+```
+
+**2. Create the database and user:**
+
+```sql
+CREATE DATABASE convoke_db;
+CREATE USER convoke_user WITH PASSWORD 'secret';
+GRANT ALL PRIVILEGES ON DATABASE convoke_db TO convoke_user;
+\c convoke_db
+GRANT ALL ON SCHEMA public TO convoke_user;
+\q
+```
+
+**3. Verify the connection:**
+
+```bash
+psql -U convoke_user -d convoke_db -h localhost
+```
+
+You should get a `convoke_db=>` prompt. Type `\q` to exit.
+
+Flyway migrations run automatically on startup and will build the full schema. No manual table creation required.
 
 ---
 
@@ -112,9 +135,9 @@ To override config at runtime:
 
 ```bash
 java -jar backend/target/backend-1.0-SNAPSHOT-exec.jar \
-  --DB_URL=jdbc:postgresql://localhost:5432/convoke \
+  --DB_URL=jdbc:postgresql://localhost:5432/convoke_db \
   --DB_USERNAME=convoke_user \
-  --DB_PASSWORD=changeme
+  --DB_PASSWORD=secret
 ```
 
 ---
