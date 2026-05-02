@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+@use '@material/line-ripple/mdc-line-ripple';
+
 
 @tailwind base;
 @tailwind components;
@@ -14,6 +17,8 @@ html, body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
 
 body {
@@ -25,57 +30,56 @@ body {
   height: 100dvh;
 }
 
-/* Define @font-face rules for each weight and style for Builder Sans */
-/* BuilderSans Font Family Declarations */
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 100;
-  src: url('assets/fonts/BuilderSans/BuilderSans-Thin-100.otf') format('opentype');
+
+/* In styles.css — no ::ng-deep needed, these are global */
+.cdk-overlay-container {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
 }
 
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 300;
-  src: url('assets/fonts/BuilderSans/BuilderSans-Light-300.otf') format('opentype');
+.cdk-overlay-backdrop {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
 }
 
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 400;
-  src: url('assets/fonts/BuilderSans/BuilderSans-Regular-400.otf') format('opentype');
+.mat-mdc-dialog-container {
+  overscroll-behavior: contain;
 }
 
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 500;
-  src: url('assets/fonts/BuilderSans/BuilderSans-Medium-500.otf') format('opentype');
+.mat-mdc-dialog-content {
+  max-height: 70dvh !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 600;
-  src: url('assets/fonts/BuilderSans/BuilderSans-SemiBold-600.otf') format('opentype');
-}
-
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 700;
-  src: url('assets/fonts/BuilderSans/BuilderSans-Bold-700.otf') format('opentype');
-}
-
-@font-face {
-  font-family: 'BuilderSans';
-  font-style: normal;
-  font-weight: 800;
-  src: url('assets/fonts/BuilderSans/BuilderSans-ExtraBold-800.otf') format('opentype');
+.full-height {
+  height: 100vh;
+  height: 100dvh;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/assets/fonts/inter/Inter-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/assets/fonts/inter/Inter-Italic-VariableFont_opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
 }

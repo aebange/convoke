@@ -53,7 +53,7 @@ public class DataSourceConfig {
         hikariConfig.setPassword(this.password);
         hikariConfig.setMaximumPoolSize(this.maxPoolSize);
         hikariConfig.setConnectionTestQuery("SELECT 1");
-        hikariConfig.setPoolName("placerl_webapp_jdbc_connection_pool");
+        hikariConfig.setPoolName("convoke_webapp_jdbc_connection_pool");
         hikariConfig.setSchema(this.schemaName);
 
         // Create the DataSource (and attempt to connect to it)

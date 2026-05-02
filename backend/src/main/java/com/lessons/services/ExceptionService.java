@@ -34,7 +34,7 @@ public class ExceptionService {
 
     private String appVersion;
 
-    private final String APPLICATION_NAME = "placerl";
+    private final String APPLICATION_NAME = "convoke";
 
     private final int LAST_ONE_DAY_FILTER = 1;
     private final int LAST_SEVEN_DAY_FILTER = 2;

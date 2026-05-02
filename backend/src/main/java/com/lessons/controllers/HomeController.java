@@ -20,8 +20,8 @@ public class HomeController {
     public String home() {
 
         // This method handles two cases:
-        // Case 1: The user goes to http://localhost:8080/placerl  --> Take users to the index.html
-        // Case 2: The user goes to http://localhost:8080/placerl/page/addReport and presses refresh --> Take users to the index.html
+        // Case 1: The user goes to http://localhost:8080/convoke  --> Take users to the index.html
+        // Case 2: The user goes to http://localhost:8080/convoke/page/... and presses refresh --> Take users to the index.html
         return "forward:/index.html";
     }
 }

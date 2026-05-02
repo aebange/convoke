@@ -1,4 +1,4 @@
-How to Initialize the PlaceRL Postgres Database
+How to Initialize the Convoke Postgres Database
 ---------------------------=-----------------
 NOTE:  The flyway scripts cannot create a database
        Someone *must* create an empty database first
@@ -6,19 +6,19 @@ NOTE:  The flyway scripts cannot create a database
 
 Procedure
 ---------
- 1. Create the placerl_db and placerl_user
+ 1. Create the convoke_db and convoke_user
     unix> psql -U postgres -h localhost
 
-          create database placerl_db;
-          create user placerl_user with password 'secret';
-          grant all privileges on database placerl_db to placerl_user;
-          alter database placerl_db     SET search_path=placerl_db;
-          alter role     placerl_user   SET search_path=placerl_db;
+          create database convoke_db;
+          create user convoke_user with password 'secret';
+          grant all privileges on database convoke_db to convoke_user;
+          alter database convoke_db     SET search_path=convoke_db;
+          alter role     convoke_user   SET search_path=convoke_db;
           \q
 
- 2. Create the placerl_db schema
-    unix> psql -U placerl_user -d placerl_db -h localhost
+ 2. Create the convoke_db schema
+    unix> psql -U convoke_user -d convoke_db -h localhost
     password:
 
-      create schema placerl_db;
+      create schema convoke_db;
       \q

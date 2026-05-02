@@ -1,110 +1,154 @@
-# AngularApp16 / Lesson 8 / Add ag-grid
+# Convoke
 
-<pre>
-Assumptions
- A) You have Maven 3.6.3 installed      (the frontend-maven-plugin requires Maven 3.6.0 or greater)
-    [see learnMaven / howToInstallMaven_3.6.3.OnCentOS.txt]
+Convoke is an open-source group event coordination tool built for friend groups who are tired of
+juggling texts across five different apps to plan a single hangout. No accounts, no logins — just
+a shared group board behind a password where everyone can propose events, vote on dates, and RSVP.
 
- B) You have NVM installed
-    [see learnNode / howToInstallNodeVersionManager.txt]
+---
 
- C) You have Java 17 JDK installed
-    [see learnJava / howToInstallJava_OpenJdk_OnCentos8.txt]
+## Features
 
+- **Password-gated group boards** — share a URL and password with your group, no accounts required
+- **Trust-based identity** — pick your name from the group roster or add yourself; no auth overhead
+- **Event proposals** — anyone can propose an event with a description and candidate dates
+- **Date voting** — members vote on proposed dates; the app surfaces who is free and who isn't
+- **RSVP tracking** — once an event is confirmed, track who's coming, who can't make it, and who hasn't responded
+- **Comments** — flat comment threads on each event for coordination chatter
+- **Persistent sessions** — your group and identity are remembered per device via local storage
 
-Procedures
-  1. Install or upgrade Node and the Angular CLI
-     a. Use NVM to install Node v18.17.0            # Angular 16.2 requires node 18.10.0 or later
-        unix> nvm install 18.17.0
-        unix> nvm use 18.7.0                        # Switch to 18.17.0
-        unix> nvm alias default 18.17.0             # Set the default version in your shell to this version
-    
-    
-     b. Verify that Node is v18.17.0 / npm is 9.6.7
-        1) Open a new terminal
-    
-        2) Verify that node is 18.17.0
-           unix> node -v
-           v18.17.0
-    
-        3) Verify that NPM is 9.6.7
-           unix> npm -v
-           9.6.7
-    
-    
-     c. Install the Angular CLI 16.2
-        1) List npm global packages
-           unix> npm list -g --depth 0
-            ├── corepack@0.19.0
-            └── npm@9.6.7
-    
-        2) Uninstall the previous version of your Angular CLI
-           unix> npm uninstall @angular/cli        # uninstall the local angular CLI
-           unix> npm uninstall -g @angular/cli     # uninstall the global angular CLI
-    
-        3) Install Angular CLI 16.2.2
-           unix> npm install -g @angular/cli@16.2.2
-    
-        4) Verify the versions are good
-           unix> ng version
-    
-                       _                      _                 ____ _     ___
-                      / \   _ __   __ _ _   _| | __ _ _ __     / ___| |   |_ _|
-                     / △ \ | '_ \ / _` | | | | |/ _` | '__|   | |   | |    | |
-                    / ___ \| | | | (_| | |_| | | (_| | |      | |___| |___ | |
-                   /_/   \_\_| |_|\__, |\__,_|_|\__,_|_|       \____|_____|___|
-                                  |___/
-    
-                  Angular CLI: 16.2.2
-                  Node: 18.17.0
-                  Package Manager: npm 9.6.7
-                  OS: linux x64
-    
-                  Angular: undefined
-                  ...
-    
-                  Package                      Version
-                  ------------------------------------------------------
-                  @angular-devkit/architect    0.1602.2 (cli-only)
-                  @angular-devkit/core         16.2.2 (cli-only)
-                  @angular-devkit/schematics   16.2.2 (cli-only)
-                  @schematics/angular          16.2.2 (cli-only)
-    
-        5) List npm global packages
-           unix> npm list -g --depth 0
-            ├── @angular/cli@16.2.2         <-- Verify that you see Angular CLI 16.2.2
-            ├── corepack@0.18.0
-            └── npm@9.6.7
+---
 
+## Tech Stack
 
- 2. Compile & Run the Web App
-    a. Clone the project
-       terminal> git clone https://github.com/traderres/angularApp16.git
- 
-    b. Checkout the correct branch
-       terminal> cd angularApp16
-       terminal> git checkout lesson8/add-grid
+| Layer       | Technology                        |
+|-------------|-----------------------------------|
+| Frontend    | Angular 16.2, Tailwind CSS, ag-Grid |
+| Backend     | Spring Boot (Java 17)             |
+| Database    | PostgreSQL, Flyway migrations     |
+| Build       | Maven (single executable JAR)     |
 
-    c. Initialize the local postgres database by following the steps in docs/howToInitializePostgresDatabase.dev.txt
-    
-    d. Build the project
-       terminal> mvn clean package -Pprod
-    
-    e. Nuke the database and rebuild ElasticSearch 
-       terminal> java -Dapp.datasource.flyway-clean-on-startup=TRUE -jar ./sync-service/target/sync-service-1.0-SNAPSHOT-exec.jar
-       
-    f. Run the webapp
-       terminal> java -jar ./backend/target/backend-1.0-SNAPSHOT-exec.jar 
-       
-    g. Connect to the webapp listening on port 8080
-       Go to http://localhost:8080/app16
-    
-    h. Stop the webapp by pressing Control-C
+---
 
+## Prerequisites
 
- 3. Setup Debugging in IntelliJ Ultimate
-    a. Open the project in IntelliJ
-    b. <a href="https://github.com/traderres/webClass/blob/master/learnAngular/lessons_Angular16/howToDebugExistingWebapp.txt">Setup debugging (so you can debug TypeScript and Java code)</a>
+| Tool        | Version      |
+|-------------|--------------|
+| Java JDK    | 17           |
+| Maven       | 3.6.3+       |
+| Node        | 18.17.0      |
+| npm         | 9.6.7        |
+| Angular CLI | 16.2.2       |
+| PostgreSQL  | 14+          |
 
+### Install Node via NVM
 
-</pre>
+```bash
+nvm install 18.17.0
+nvm use 18.17.0
+nvm alias default 18.17.0
+```
+
+### Install Angular CLI
+
+```bash
+npm uninstall -g @angular/cli
+npm install -g @angular/cli@16.2.2
+ng version  # verify
+```
+
+---
+
+## Environment Configuration
+
+Convoke is configured via environment variables. Create a local `.env` file or export these in
+your shell before running. Do not commit real credentials to the repository.
+
+| Variable                  | Description                        | Example                                      |
+|---------------------------|------------------------------------|----------------------------------------------|
+| `DB_URL`                  | JDBC connection URL                | `jdbc:postgresql://localhost:5432/convoke`   |
+| `DB_USERNAME`             | Database username                  | `convoke_user`                               |
+| `DB_PASSWORD`             | Database password                  | `changeme`                                   |
+| `SERVER_PORT`             | Port the app listens on            | `8080`                                       |
+| `CONVOKE_CONTEXT_PATH`    | App context path                   | `/convoke`                                   |
+
+---
+
+## Database Setup
+
+1. Create a PostgreSQL database and user:
+
+```sql
+CREATE DATABASE convoke;
+CREATE USER convoke_user WITH PASSWORD 'changeme';
+GRANT ALL PRIVILEGES ON DATABASE convoke TO convoke_user;
+```
+
+2. Flyway migrations run automatically on startup and will build the full schema.
+
+---
+
+## Build
+
+```bash
+git clone https://github.com/your-org/convoke.git
+cd convoke
+mvn clean package -Pprod
+```
+
+The build compiles the Angular frontend and packages it inside the Spring Boot JAR. The output
+is a single self-contained executable at `backend/target/backend-1.0-SNAPSHOT-exec.jar`.
+
+---
+
+## Run
+
+```bash
+java -jar backend/target/backend-1.0-SNAPSHOT-exec.jar
+```
+
+Then open your browser to `http://localhost:8080/convoke`.
+
+To override config at runtime:
+
+```bash
+java -jar backend/target/backend-1.0-SNAPSHOT-exec.jar \
+  --DB_URL=jdbc:postgresql://localhost:5432/convoke \
+  --DB_USERNAME=convoke_user \
+  --DB_PASSWORD=changeme
+```
+
+---
+
+## Deployment
+
+Convoke is designed to run on a single cheap VPS behind an nginx reverse proxy with SSL.
+
+A basic systemd service and nginx config are provided in `docs/deployment/`. See
+`docs/deployment/README.md` for the full walkthrough including SSL setup via Certbot.
+
+---
+
+## Project Structure
+
+```
+convoke/
+├── backend/          # Spring Boot application (REST API, Flyway, embedded frontend)
+├── frontend/         # Angular 16.2 application
+├── docs/             # Architecture notes, deployment guides, DB setup
+├── LICENSE
+└── README.md
+```
+
+---
+
+## Contributing
+
+Convoke is open source under the MIT license. Issues and pull requests are welcome.
+There are no formal contribution requirements at this time — just keep it clean and document
+what you changed.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE) for details.

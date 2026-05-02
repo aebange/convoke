@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.lessons</groupId>
-  <artifactId>placeRL</artifactId>
+  <artifactId>convoke</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <modules>
@@ -15,7 +15,7 @@
   </modules>
 
 
-  <name>placeRL</name>
+  <name>convoke</name>
 
   <packaging>pom</packaging>
 
