@@ -6,20 +6,6 @@
 Create sequence seq_table_ids increment by 1 START WITH 5000;
 Create sequence seq_transaction_ids increment by 1 START WITH 1000;
 
-
------------------------------------------------------------------------------
--- Create this table:  system_parameters
------------------------------------------------------------------------------
-create table system_parameters
-(
-    name              varchar(100)    not null,
-    value             varchar         not null,
-    primary key(name)
-);
-comment on table system_parameters is 'This table holds certain system parameters and data -- e.g., when the niss data was last refreshed';
-
-
-
 -----------------------------------------------------------------------------
 -- Create this table:  exceptions
 -----------------------------------------------------------------------------
