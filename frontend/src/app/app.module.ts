@@ -35,6 +35,8 @@ import {ErrorDialogComponent} from "./errorHandler/error-dialog/error-dialog.com
 import { ShortNumberPipe } from './utilities/short-number.pipe';
 import { DateFormatPipe } from './utilities/date-format.pipe';
 import { JoinComponent } from './features/join/join.component';
+import { NavbarComponent } from './layout/navbar/navbar.component';
+import { HeaderComponent } from './layout/header/header.component';
 
 // Set up the routes.  If no route is found, then take the user to the NotFoundComponent
 // NOTE:  The **ORDER** of these routes matters.  The NotFoundComponent should always be last
@@ -50,6 +52,8 @@ const appRoutes: Routes = [
     ShortNumberPipe,
     DateFormatPipe,
     JoinComponent,
+    NavbarComponent,
+    HeaderComponent,
   ],
   imports: [
     AgGridModule,

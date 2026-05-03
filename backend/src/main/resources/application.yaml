@@ -5,9 +5,16 @@
 # Purpose:   Set the dev profile for testing with a local database and hard-coded credentials
 #################################################################################################
 name: convoke
-server.servlet.context-path: /convoke
-server.port: 8080
-
+server:
+  port: 8080
+  address: 0.0.0.0
+  servlet:
+    context-path: /
+    session:
+      cookie:
+        secure: false
+        same-site: strict
+      timeout: 8h
 
 
 # Disable cors check because we are running in local dev mode
