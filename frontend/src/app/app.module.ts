@@ -37,6 +37,8 @@ import { DateFormatPipe } from './utilities/date-format.pipe';
 import { JoinComponent } from './features/join/join.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { HeaderComponent } from './layout/header/header.component';
+import { ExistingGroupDialogComponent } from './dialogs/existing-group-dialog/existing-group-dialog.component';
+import { CreateGroupDialogComponent } from './dialogs/create-group-dialog/create-group-dialog.component';
 
 // Set up the routes.  If no route is found, then take the user to the NotFoundComponent
 // NOTE:  The **ORDER** of these routes matters.  The NotFoundComponent should always be last
@@ -54,6 +56,8 @@ const appRoutes: Routes = [
     JoinComponent,
     NavbarComponent,
     HeaderComponent,
+    ExistingGroupDialogComponent,
+    CreateGroupDialogComponent,
   ],
   imports: [
     AgGridModule,

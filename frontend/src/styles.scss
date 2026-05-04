@@ -164,6 +164,23 @@ body {
   font-display: swap;
 }
 
-.form-field-title {
-  @apply text-xs font-bold text-primary uppercase whitespace-nowrap py-0 my-0 -mb-1.5;
+.form-field-title-primary {
+  @apply text-xs font-thin text-primary uppercase whitespace-nowrap py-0 my-0 -mb-1.5;
+}
+
+.form-field-title-white {
+  @apply text-xs text-white whitespace-nowrap py-0 my-0 -mb-1.5;
+}
+
+.full-screen-dialog {
+  border-radius: 0 !important;
+
+  .mat-mdc-dialog-container {
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .mdc-dialog__surface {
+    border-radius: 0 !important;
+  }
 }

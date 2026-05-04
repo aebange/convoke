@@ -1,0 +1,63 @@
+<div class="flex flex-col w-full h-full bg-primary p-10 relative">
+  <!-- Cancel Button -->
+  <div class="flex gap-3 items-center absolute top-5 right-6" (click)="this.closeDialogClicked()">
+    <span class="text-white text-lg">Cancel</span>
+    <i class="fa-solid fa-xmark-large text-white"></i>
+  </div>
+
+  <!-- Content Wrapper -->
+  <div class="flex flex-col gap-5 h-full items-center justify-center">
+
+    <!-- Icon -->
+    <div class="fa-stack items-center justify-center flex mb-2">
+      <i class="fa-solid fa-circle text-6xl text-secondary fa-stack-1x -ml-2"></i>
+      <i class="fa-solid fa-door-open text-4xl text-primary fa-stack-2x "></i>
+    </div>
+
+    <!-- Title -->
+    <span class="text-4xl whitespace-nowrap font-semibold text-white ">Join the Club</span>
+
+    <!-- Subtitle -->
+    <span class="text-primary-100 text-center">
+      Enter the group name and password your friends sent you.
+    </span>
+
+    <!-- Form Fields -->
+    <div class="flex flex-col w-full py-5 items-center justify-center">
+      <form autocomplete="off" class="flex flex-col w-full" [formGroup]="this.groupForm">
+
+        <!-- Group Name Field -->
+        <mat-form-field appearance="outline" floatLabel="always" >
+          <mat-label class="!font-bold">Group Name</mat-label>
+          <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
+        </mat-form-field>
+
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" floatLabel="always" >
+          <mat-label class="!font-bold">Group Password</mat-label>
+          <input matInput type="password" formControlName="groupPassword" placeholder="••••••••">
+        </mat-form-field>
+
+      </form>
+
+      <!-- Continue Button -->
+      <button class="flex transition-all duration-300 bg-secondary text-primary w-full flex-shrink-0 h-[56px]
+          self-center rounded-md items-center justify-center
+         gap-3 disabled:bg-secondary/25" (click)="this.continueClicked()" [disabled]="!this.groupForm.valid">
+        <span class="font-bold">Continue</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+
+    </div>
+
+    <!-- Hint -->
+    <div class="flex flex-row text-primary-400 text-xs text-center">
+      <i class="fa-regular fa-question-circle mt-0.5"></i>
+      <span>
+        Can't find your code? Ask your host, <span class="underline">or make your own group from scratch.</span>
+      </span>
+    </div>
+
+  </div>
+</div>
