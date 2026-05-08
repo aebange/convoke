@@ -1,0 +1,23 @@
+:host ::ng-deep .mdc-text-field--outlined {
+  background-color: #ffffff !important;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+:host ::ng-deep .mdc-notched-outline__leading,
+:host ::ng-deep .mdc-notched-outline__notch,
+:host ::ng-deep .mdc-notched-outline__trailing {
+  background-color: transparent !important;
+  z-index: 1;
+}
+
+:host ::ng-deep .mat-mdc-form-field-infix {
+  background-color: transparent !important;
+  z-index: 2;
+}
+
+
+.spotlight {
+  background: radial-gradient(ellipse at center, #1a5c3a 0%, #0B3D2E 65%);
+}
+

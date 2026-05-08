@@ -1,0 +1,22 @@
+:host ::ng-deep .mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color: #ffffff;
+  --mdc-outlined-text-field-hover-outline-color: #ffffff;
+  --mdc-outlined-text-field-focus-outline-color: #ffffff;
+  --mdc-outlined-text-field-label-text-color: #22C55E;
+  --mdc-outlined-text-field-input-placeholder-text-color: rgba(34, 197, 94, 0.5);
+  --mdc-outlined-text-field-input-text-color: #ffffff;
+  --mdc-outlined-text-field-placeholder-text-color: rgba(34, 197, 94, 0.5);
+}
+:host ::ng-deep .mat-mdc-form-field input::placeholder {
+  color: #319653 !important;
+  font-weight: bold;
+  opacity: 0.5;
+}
+
+:host ::ng-deep .mdc-notched-outline__notch {
+  border-right: none !important;
+}
+
+:host ::ng-deep .mat-mdc-form-field {
+  --mdc-outlined-text-field-focus-label-text-color: #22C55E;
+}

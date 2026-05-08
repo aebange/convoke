@@ -1,3 +1,75 @@
-<div class="flex w-full h-full items-center justify-center">
-  <span class="text-4xl">Join Page</span>
+<div class="flex flex-col h-full w-full bg-primary spotlight">
+  <!-- App Header -->
+  <div
+    class="flex flex-row h-[75px] flex-shrink-0 border-b px-7 border-border-primary bg-background-secondary items-center justify-between">
+
+    <!-- App Title -->
+    <div class="flex flex-row gap-2">
+      <i class="fa-solid fa-comments text-lg text-primary"></i>
+      <span class="text-2xl text-primary font-bold">Convoke</span>
+    </div>
+
+    <!-- App Menu -->
+    <div class="flex">
+      <button>
+        <i class="fa-solid fa-bars text-lg text-primary"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Content Wrapper  -->
+  <div class="flex flex-col h-full w-full justify-between">
+
+    <!-- Title Region -->
+    <div class="flex flex-col h-full w-full items-center justify-between gap-3 md:gap-5 p-10">
+
+      <!-- Title -->
+      <span class="text-5xl text-white font-bold text-center tracking-wide">Miss your <br>friends?</span>
+
+      <!-- Icon -->
+      <div class="md:hidden fa-stack items-center justify-center flex">
+        <i class="fa-solid fa-circle text-6xl text-secondary fa-stack-1x -ml-2"></i>
+        <i class="fa-solid fa-people-group text-4xl text-primary fa-stack-2x "></i>
+      </div>
+
+      <!-- Subtitle -->
+      <span class="text-white text-center font-semibold">
+      Lets save your social life, unplanned events don't happen.
+      </span>
+
+      <!-- Images -->
+      <div class="flex-row gap-5 w-full h-full hidden md:flex items-center justify-center">
+        <div class="aspect-square rounded-lg h-full bg-primary-400"></div>
+        <div class="aspect-square rounded-lg h-full bg-primary-400"></div>
+      </div>
+
+    </div>
+
+    <!-- Slide-up Panel -->
+    <div class="flex flex-col bg-background-secondary rounded-t-[2rem] h-[200px] flex-shrink-0 gap-5 items-center">
+
+      <!-- Grab Icon -->
+      <i class="fa-solid fa-grip-lines text-lg"></i>
+
+      <!-- Overflow Area -->
+      <div class="flex flex-col w-full gap-5 bg-background-secondary px-5 pb-5">
+        <!-- Continue Button -->
+        <button class="flex bg-primary w-full flex-shrink-0 h-[56px] self-center rounded-md items-center justify-center
+        text-white gap-3" (click)="this.existingGroupClicked()">
+          <span class="font-bold">Enter Group Name</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <!-- Create & Help Buttons -->
+        <div class="flex gap-3 w-full flex-shrink-0 h-[56px] self-center">
+          <button class="flex border-primary border w-full h-[56px] self-center rounded-md items-center justify-center gap-3 text-primary"
+            (click)="this.createGroupClicked()">
+            <span class="font-bold">Create New Group</span>
+            <i class="fa-solid fa-plus"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

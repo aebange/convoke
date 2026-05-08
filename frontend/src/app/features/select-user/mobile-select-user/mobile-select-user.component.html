@@ -1,0 +1,170 @@
+<div class="flex flex-row w-full h-full bg-primary relative overflow-hidden">
+
+  <!-- Initial User Selector -->
+  <div class="flex flex-col gap-5 h-full w-full items-center absolute transition-all duration-300 justify-center"
+       [class.translate-x-0]="!memberSelected"
+       [class.-translate-x-full]="memberSelected">
+
+    <!-- Title -->
+    <span class="text-4xl pt-10 px-10 whitespace-nowrap font-semibold text-white">Who are you?</span>
+
+    <!-- Subtitle -->
+    <span class="text-primary-100 px-10 text-center">
+      Select your name, or add yourself if you're new here.
+    </span>
+
+    <!-- User Selection Wrapper -->
+    <div class="flex flex-col h-full w-full overflow-hidden pb-10">
+
+      <!-- User Selection Page Container -->
+      <div class="flex w-full h-full overflow-hidden relative" (touchstart)="onTouchStart($event)"
+           (touchend)="onTouchEnd($event)">
+        <!-- Outgoing Page -->
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 grid-rows-2 h-full w-full absolute top-0 left-0"
+             *ngIf="isAnimating"
+             [@slideAnimation]="slideDirection"
+             (@slideAnimation.done)="onAnimationDone()">
+          <!-- Add Member item -->
+          <div class="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer"
+               (click)="openAddMember()"
+               *ngIf="displayPage === 0">
+            <div class="w-20 h-20 rounded-full border-2 border-dashed border-white flex items-center justify-center">
+              <i class="fa-solid fa-plus text-3xl text-white"></i>
+            </div>
+            <span class="text-white font-semibold text-sm tracking-wide">Add Member</span>
+          </div>
+
+          <!-- Paged Members -->
+          <div *ngFor="let member of pagedMembers"
+               class="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer"
+               (click)="selectMember(member)">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center"
+                 [style.background-color]="member.avatar">
+              <i class="fa-solid fa-user text-4xl text-white"></i>
+            </div>
+            <span class="text-white font-semibold text-sm tracking-wide">{{ member.displayName }}</span>
+          </div>
+        </div>
+
+        <!-- Incoming page (hidden until animation completes) -->
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 grid-rows-2 h-full w-full absolute top-0 left-0"
+             *ngIf="!isAnimating || incomingVisible"
+             [@slideIn]="initialized ? { value: '',
+             params: { startX: slideDirection === 'left' ? 'translateX(100%)' : 'translateX(-100%)' } } : null">
+          <!-- Add Member item -->
+          <div class="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer"
+               (click)="openAddMember()"
+               *ngIf="displayPage === 0">
+            <div class="w-20 h-20 rounded-full border-2 border-dashed border-white flex items-center justify-center">
+              <i class="fa-solid fa-plus text-3xl text-white"></i>
+            </div>
+            <span class="text-white font-semibold text-sm tracking-wide">Add Member</span>
+          </div>
+
+          <!-- Paged Members -->
+          <div *ngFor="let member of pagedMembers"
+               class="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer"
+               (click)="selectMember(member)">
+            <div class="w-20 h-20 rounded-full flex items-center justify-center"
+                 [style.background-color]="member.avatar">
+              <i class="fa-solid fa-user text-4xl text-white"></i>
+            </div>
+            <span class="text-white font-semibold text-sm tracking-wide">{{ member.displayName }}</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- Pagination -->
+      <div class="w-full h-[35px]">
+        <!-- dot indicators -->
+        <div class="flex justify-center gap-2 mt-4">
+          <span *ngFor="let p of totalPages | pagination"
+                class="w-2 h-2 rounded-full"
+                [class.bg-secondary]="p === currentPage"
+                (click)="this.goToPage(p)"
+                [class.bg-neutral-300]="p !== currentPage">
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- User Selection Confirmation -->
+  <div class="flex flex-col gap-5 h-full w-full items-center absolute transition-all duration-300 justify-center p-10"
+       [class.translate-x-full]="!memberSelected"
+       [class.translate-x-0]="memberSelected">
+
+    <!-- Icon -->
+    <div class="md:hidden fa-stack items-center justify-center flex">
+      <i class="fa-solid fa-circle text-6xl text-secondary fa-stack-1x -ml-2.5"></i>
+      <i class="fa-solid fa-user-secret text-4xl text-primary fa-stack-2x "></i>
+    </div>
+
+    <!-- Title -->
+    <span class="text-4xl whitespace-nowrap font-semibold text-white">You sure?</span>
+
+    <!-- Subtitle -->
+    <span class="text-primary-100 text-center">
+      We use the <b>honor system</b> here, lying only hurts your friends.
+    </span>
+
+    <!-- Continue Button -->
+    <button class="flex transition-all duration-300 bg-secondary text-primary w-full flex-shrink-0 h-[56px]
+          self-center rounded-md items-center justify-center
+         gap-3 disabled:bg-secondary/25" (click)="this.openUserSession()">
+      <span class="font-bold">I'm Andrew</span>
+      <i class="fa-solid fa-check"></i>
+    </button>
+
+    <!-- Back Button -->
+    <div class="flex gap-3 w-full flex-shrink-0 h-[56px] self-center">
+      <button class="flex border-secondary border w-full h-[56px] self-center rounded-md items-center justify-center gap-3 text-secondary"
+              (click)="this.goBackToUserSelection()">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="font-bold">Back</span>
+      </button>
+    </div>
+  </div>
+
+
+  <!-- Create User Menu -->
+  <div class="flex flex-col gap-5 h-full w-full items-center absolute transition-all duration-300 justify-center p-10"
+       [class.translate-x-full]="!createMemberSelected"
+       [class.translate-x-0]="memberSelected">
+
+    <!-- Icon -->
+    <div class="md:hidden fa-stack items-center justify-center flex">
+      <i class="fa-solid fa-circle text-6xl text-secondary fa-stack-1x -ml-2.5"></i>
+      <i class="fa-solid fa-user-secret text-4xl text-primary fa-stack-2x "></i>
+    </div>
+
+    <!-- Title -->
+    <span class="text-4xl whitespace-nowrap font-semibold text-white">You sure?</span>
+
+    <!-- Subtitle -->
+    <span class="text-primary-100 text-center">
+      We use the <b>honor system</b> here, lying only hurts your friends.
+    </span>
+
+    <!-- Continue Button -->
+    <button class="flex transition-all duration-300 bg-secondary text-primary w-full flex-shrink-0 h-[56px]
+          self-center rounded-md items-center justify-center
+         gap-3 disabled:bg-secondary/25" (click)="this.openUserSession()">
+      <span class="font-bold">I'm Andrew</span>
+      <i class="fa-solid fa-check"></i>
+    </button>
+
+    <!-- Back Button -->
+    <div class="flex gap-3 w-full flex-shrink-0 h-[56px] self-center">
+      <button class="flex border-secondary border w-full h-[56px] self-center rounded-md items-center justify-center gap-3 text-secondary"
+              (click)="this.goBackToUserSelection()">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="font-bold">Back</span>
+      </button>
+    </div>
+  </div>
+</div>

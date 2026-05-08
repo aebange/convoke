@@ -65,9 +65,12 @@ module.exports = {
           900: '#0A0A0A',
         },
         background: {
-          primary:   '#FFFFFF',
+          primary:   '#DCD9D9',
           secondary: '#F0F0EF',
           card:      '#F7F7F7',
+        },
+        border: {
+          primary: '#C0C8C3',
         },
         surface: {
           DEFAULT: '#FFFFFF',
@@ -75,7 +78,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['GeneralSans', 'sans-serif'],
       },
     },
   },
