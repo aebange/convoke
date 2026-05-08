@@ -1,11 +1,12 @@
 import {Component, HostListener} from '@angular/core';
 
+
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  selector: 'app-select-user',
+  templateUrl: './select-user.component.html',
+  styleUrls: ['./select-user.component.scss'],
 })
-export class NavbarComponent {
+export class SelectUserComponent  {
   public isMobile: boolean = false;
 
   public ngOnInit(): void {

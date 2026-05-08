@@ -22,7 +22,6 @@ export class JoinComponent implements OnInit {
 
   public ngOnInit() {
 
-    this.existingGroupClicked();
   }
 
   public existingGroupClicked(): void {
@@ -38,8 +37,12 @@ export class JoinComponent implements OnInit {
 
   public createGroupClicked(): void {
     let createGroupDialogRef: MatDialogRef<CreateGroupDialogComponent> = this.dialog.open(CreateGroupDialogComponent, {
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
+      height: '100%',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      panelClass: 'full-screen-dialog',
+      autoFocus: false
     })
   }
 }

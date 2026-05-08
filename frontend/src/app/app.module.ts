@@ -35,15 +35,27 @@ import {ErrorDialogComponent} from "./errorHandler/error-dialog/error-dialog.com
 import { ShortNumberPipe } from './utilities/short-number.pipe';
 import { DateFormatPipe } from './utilities/date-format.pipe';
 import { JoinComponent } from './features/join/join.component';
-import { NavbarComponent } from './layout/navbar/navbar.component';
-import { HeaderComponent } from './layout/header/header.component';
 import { ExistingGroupDialogComponent } from './dialogs/existing-group-dialog/existing-group-dialog.component';
 import { CreateGroupDialogComponent } from './dialogs/create-group-dialog/create-group-dialog.component';
+import { SelectUserComponent } from './features/select-user/select-user.component';
+import { PaginationPipe } from './pipes/pagination.pipe';
+import { MobileSelectUserComponent } from './features/select-user/mobile-select-user/mobile-select-user.component';
+import { PcSelectUserComponent } from './features/select-user/pc-select-user/pc-select-user.component';
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { MobileFooterComponent } from './layout/footer/mobile-footer/mobile-footer.component';
+import { NavbarComponent } from './layout/navbar/navbar.component';
+import { PcHeaderComponent } from './layout/pc-header/pc-header.component';
+import { PcFooterComponent } from './layout/footer/pc-footer/pc-footer.component';
+import { MobileTopnavComponent } from './layout/navbar/mobile-topnav/mobile-topnav.component';
+import { PcSidenavComponent } from './layout/navbar/pc-sidenav/pc-sidenav.component';
+import { FooterComponent } from './layout/footer/footer.component';
 
 // Set up the routes.  If no route is found, then take the user to the NotFoundComponent
 // NOTE:  The **ORDER** of these routes matters.  The NotFoundComponent should always be last
 const appRoutes: Routes = [
   { path:  '',                                component: JoinComponent, },
+  { path:  'page/select-user/:groupId',       component: SelectUserComponent, },
+  { path:  'page/dashboard/:groupId',         component: DashboardComponent, },
   { path:  '**',                              component: NotFoundComponent }
 ];
 
@@ -54,10 +66,20 @@ const appRoutes: Routes = [
     ShortNumberPipe,
     DateFormatPipe,
     JoinComponent,
-    NavbarComponent,
-    HeaderComponent,
     ExistingGroupDialogComponent,
     CreateGroupDialogComponent,
+    SelectUserComponent,
+    PaginationPipe,
+    MobileSelectUserComponent,
+    PcSelectUserComponent,
+    DashboardComponent,
+    MobileFooterComponent,
+    NavbarComponent,
+    PcHeaderComponent,
+    PcFooterComponent,
+    MobileTopnavComponent,
+    PcSidenavComponent,
+    FooterComponent,
   ],
   imports: [
     AgGridModule,

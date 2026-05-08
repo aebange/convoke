@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {DialogRef} from "@angular/cdk/dialog";
 
 @Component({
   selector: 'app-create-group-dialog',
@@ -12,13 +13,23 @@ export class CreateGroupDialogComponent implements OnInit {
 
   public constructor(
     private formBuilder: FormBuilder,
+    private dialogRef: DialogRef,
   ) {
   }
 
   public ngOnInit() {
     this.groupForm = this.formBuilder.group({
-      groupName: [null, Validators.required]
+      groupName: [null, Validators.required],
+      groupPassword: [null, Validators.required]
     })
+  }
+
+  public closeDialogClicked(): void {
+    this.dialogRef.close();
+  }
+
+  public continueClicked(): void {
+    this.dialogRef.close();
   }
 
 }

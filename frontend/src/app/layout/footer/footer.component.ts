@@ -1,11 +1,11 @@
 import {Component, HostListener} from '@angular/core';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  selector: 'app-footer',
+  templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss']
 })
-export class NavbarComponent {
+export class FooterComponent {
   public isMobile: boolean = false;
 
   public ngOnInit(): void {

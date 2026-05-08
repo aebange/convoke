@@ -1,0 +1,13 @@
+.active-button {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #0B3D2E;
+  }
+}
