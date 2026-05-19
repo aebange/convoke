@@ -79,6 +79,11 @@
     </dependency>
 
     <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-crypto</artifactId>
+    </dependency>
+
+    <dependency>
       <!-- Hikari Data Source / JDBC Connection Pool -->
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
