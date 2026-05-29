@@ -1,0 +1,25 @@
+<div class="flex flex-col h-full w-full md:flex-row">
+
+  <!-- Desktop sidenav — hidden on mobile -->
+  <app-pc-sidenav class="hidden md:flex"></app-pc-sidenav>
+
+  <div class="flex flex-col h-full w-full">
+
+    <!-- Mobile top nav — hidden on desktop -->
+    <app-mobile-topnav class="flex h-[75px] w-full md:hidden"></app-mobile-topnav>
+
+    <!-- Desktop header — hidden on mobile -->
+    <app-pc-header class="hidden md:flex"></app-pc-header>
+
+    <!-- Page content -->
+    <main class="relative overflow-hidden flex-1 min-h-0">
+      <div [@routeSlide]="getRouteAnimation(outlet)" class="absolute inset-0">
+        <router-outlet #outlet="outlet"></router-outlet>
+      </div>
+    </main>
+
+    <!-- Mobile footer nav — hidden on desktop -->
+    <app-mobile-footer class="flex h-[75px] w-full md:hidden"></app-mobile-footer>
+
+  </div>
+</div>

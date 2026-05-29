@@ -41,7 +41,7 @@ import { SelectUserComponent } from './features/select-user/select-user.componen
 import { PaginationPipe } from './pipes/pagination.pipe';
 import { MobileSelectUserComponent } from './features/select-user/mobile-select-user/mobile-select-user.component';
 import { PcSelectUserComponent } from './features/select-user/pc-select-user/pc-select-user.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { EventsComponent } from './features/events/events.component';
 import { MobileFooterComponent } from './layout/footer/mobile-footer/mobile-footer.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { PcHeaderComponent } from './layout/pc-header/pc-header.component';
@@ -49,14 +49,32 @@ import { PcFooterComponent } from './layout/footer/pc-footer/pc-footer.component
 import { MobileTopnavComponent } from './layout/navbar/mobile-topnav/mobile-topnav.component';
 import { PcSidenavComponent } from './layout/navbar/pc-sidenav/pc-sidenav.component';
 import { FooterComponent } from './layout/footer/footer.component';
+import { AppShellComponent } from './layout/app-shell/app-shell.component';
+import { MembersComponent } from './features/members/members.component';
+import { VotesComponent } from './features/votes/votes.component';
+import { ProfileComponent } from './features/profile/profile.component';
 
 // Set up the routes.  If no route is found, then take the user to the NotFoundComponent
 // NOTE:  The **ORDER** of these routes matters.  The NotFoundComponent should always be last
 const appRoutes: Routes = [
-  { path:  '',                                component: JoinComponent, },
-  { path:  'page/select-user/:groupId',       component: SelectUserComponent, },
-  { path:  'page/dashboard/:groupId',         component: DashboardComponent, },
-  { path:  '**',                              component: NotFoundComponent }
+  // Unauthenticated Routes
+  { path: '',                     component: JoinComponent },
+  { path: 'page/select-user/:groupId', component: SelectUserComponent },
+
+  // Authenticated routes - rendered after login
+  {
+    path: 'page/:groupId',
+    component: AppShellComponent,
+    children: [
+      { path: 'events',  component: EventsComponent, data: { animation: 'events' } },
+      { path: 'members', component: MembersComponent, data: { animation: 'members' } },
+      { path: 'votes',   component: VotesComponent, data: { animation: 'votes' } },
+      { path: 'profile', component: ProfileComponent, data: { animation: 'profile' } },
+    ]
+  },
+
+  // 404 Component
+  { path: '**', component: NotFoundComponent }
 ];
 
 @NgModule({
@@ -72,7 +90,7 @@ const appRoutes: Routes = [
     PaginationPipe,
     MobileSelectUserComponent,
     PcSelectUserComponent,
-    DashboardComponent,
+    EventsComponent,
     MobileFooterComponent,
     NavbarComponent,
     PcHeaderComponent,
@@ -80,6 +98,10 @@ const appRoutes: Routes = [
     MobileTopnavComponent,
     PcSidenavComponent,
     FooterComponent,
+    AppShellComponent,
+    MembersComponent,
+    VotesComponent,
+    ProfileComponent,
   ],
   imports: [
     AgGridModule,
