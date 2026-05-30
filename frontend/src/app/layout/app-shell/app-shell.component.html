@@ -12,7 +12,7 @@
     <app-pc-header class="hidden md:flex"></app-pc-header>
 
     <!-- Page content -->
-    <main class="relative overflow-hidden flex-1 min-h-0">
+    <main class="relative overflow-hidden flex-1 min-h-0 bg-background-secondary">
       <div [@routeSlide]="getRouteAnimation(outlet)" class="absolute inset-0">
         <router-outlet #outlet="outlet"></router-outlet>
       </div>
