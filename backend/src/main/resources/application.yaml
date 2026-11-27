@@ -70,6 +70,16 @@ security.mode: localdev    # Possible values are localdev or keycloak)
 
 
 ##########################################################
+# JWT Settings
+#
+# The signing secret must be a Base64-encoded key of at least 256 bits.
+# Override CONVOKE_JWT_SECRET in production; the default below is for local dev only.
+##########################################################
+convoke.jwt.secret: ${CONVOKE_JWT_SECRET:3rs1PJDRvUbfiE69leG8gCWeTF1UL9BM/CRfKCIblfE=}
+convoke.jwt.expiration-days: 30
+
+
+##########################################################
 # File Upload Settings
 ##########################################################
 spring.servlet.multipart.enabled: true
