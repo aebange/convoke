@@ -72,16 +72,16 @@ public class GroupService {
         String trimmed = name != null ? name.trim() : "";
 
         if (trimmed.isEmpty()) {
-            return new GetGroupNameAvailabilityDTO(trimmed, false, "Name is required");
+            return new GetGroupNameAvailabilityDTO(trimmed, false, false, "Name is required");
         }
         if (trimmed.length() > NAME_MAX_LENGTH) {
-            return new GetGroupNameAvailabilityDTO(trimmed, false, "Name must be " + NAME_MAX_LENGTH + " characters or fewer");
+            return new GetGroupNameAvailabilityDTO(trimmed, false, false, "Name must be " + NAME_MAX_LENGTH + " characters or fewer");
         }
         if (!NAME_PATTERN.matcher(trimmed).matches()) {
-            return new GetGroupNameAvailabilityDTO(trimmed, false, "Name may only contain letters, numbers, hyphens, and underscores");
+            return new GetGroupNameAvailabilityDTO(trimmed, false, false, "Name may only contain letters, numbers, hyphens, and underscores");
         }
 
-        String sql = "SELECT id FROM groups WHERE name = :name";
+        String sql = "SELECT id FROM groups WHERE lower(name) = lower(:name)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", trimmed);
@@ -89,10 +89,10 @@ public class GroupService {
         SqlRowSet rs = namedParameterJdbcTemplate.queryForRowSet(sql, params);
 
         if (rs.next()) {
-            return new GetGroupNameAvailabilityDTO(trimmed, false, "That name is already taken");
+            return new GetGroupNameAvailabilityDTO(trimmed, true, false, "That name is already taken");
         }
 
-        return new GetGroupNameAvailabilityDTO(trimmed, true, "Name is available");
+        return new GetGroupNameAvailabilityDTO(trimmed, false, true, "Name is available");
     }
 
     // ------------------------------------------------------------------
@@ -118,7 +118,7 @@ public class GroupService {
     }
 
     private void assertGroupNameAvailable(String name) throws Exception {
-        String sql = "SELECT id FROM groups WHERE name = :name";
+        String sql = "SELECT id FROM groups WHERE lower(name) = lower(:name)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", name);
@@ -146,7 +146,7 @@ public class GroupService {
     }
 
     private GetGroupDetailDTO fetchGroup(String name) throws Exception {
-        String sql = "SELECT id, name, created_at FROM groups WHERE name = :name";
+        String sql = "SELECT id, name, created_at FROM groups WHERE lower(name) = lower(:name)";
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", name);

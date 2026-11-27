@@ -32,8 +32,8 @@ public class GroupController {
         return ResponseEntity.ok(groups);
     }
 
-    @RequestMapping(value = "/api/groups/check-name/{name}", method = RequestMethod.GET)
-    public ResponseEntity<GetGroupNameAvailabilityDTO> checkGroupName(@PathVariable("name") String name) throws Exception {
+    @RequestMapping(value = "/api/groups/check-name", method = RequestMethod.GET)
+    public ResponseEntity<GetGroupNameAvailabilityDTO> checkGroupName(@RequestParam("name") String name) throws Exception {
         GetGroupNameAvailabilityDTO result = groupService.checkGroupName(name);
         return ResponseEntity.ok(result);
     }
