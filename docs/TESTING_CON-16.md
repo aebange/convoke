@@ -2,6 +2,11 @@
 
 Manual test procedure for the group-level authentication login flow.
 
+> **Scope note:** group **creation** is out of scope for CON-16 (groups are seeded via SQL).
+> The "Create New Group" dialog is a placeholder from earlier work — its submit handler only closes
+> the dialog and does nothing else. Use the **"Enter Group Name"** flow to test this ticket, and
+> seed a group via the API or SQL (section 3).
+
 ## 1. Prerequisites
 
 - Java 17, Maven 3.6+, Node 18 (only if you build the frontend yourself), PostgreSQL running.
