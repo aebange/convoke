@@ -36,9 +36,11 @@ export class ErrorInterceptor implements HttpInterceptor {
 
   private shouldDisplayError(err: HttpErrorResponse, requestUrl: string): boolean {
     if (err.status < 200 || err.status >= 300) {
-      // Failed logins are surfaced inline by the login dialog, not in the global error dialog
-      const isLoginRequest = requestUrl.includes('/api/auth/login');
-      return !(isLoginRequest && err.status === 401);
+      // Login and group-name-check errors are surfaced inline in the login dialog,
+      // not in the global error dialog.
+      const handledInline = requestUrl.includes('/api/auth/login')
+        || requestUrl.includes('/api/groups/check-name');
+      return !handledInline;
     }
 
     return false;

@@ -30,6 +30,15 @@
         <mat-form-field appearance="outline" floatLabel="always" >
           <mat-label class="!font-bold">Group Name</mat-label>
           <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
+          <mat-error *ngIf="groupNameControl.hasError('required')">Group name is required</mat-error>
+          <mat-error *ngIf="groupNameControl.hasError('maxlength')">Group name must be 50 characters or fewer</mat-error>
+          <mat-error *ngIf="groupNameControl.hasError('pattern')">Use letters, numbers, hyphens, or underscores</mat-error>
+          <mat-error *ngIf="groupNameControl.hasError('groupNotFound')">No group found with that name</mat-error>
+          <mat-error *ngIf="groupNameControl.hasError('checkFailed')">
+            Could not verify the group name.
+            <button type="button" class="underline font-semibold" (click)="retryGroupNameCheck()">Retry</button>
+          </mat-error>
+          <mat-hint *ngIf="groupNameControl.pending">Checking group name…</mat-hint>
         </mat-form-field>
 
 
@@ -37,16 +46,25 @@
         <mat-form-field appearance="outline" floatLabel="always" >
           <mat-label class="!font-bold">Group Password</mat-label>
           <input matInput type="password" formControlName="groupPassword" placeholder="••••••••">
+          <mat-error *ngIf="groupPasswordControl.invalid">{{ passwordErrorMessage }}</mat-error>
+          <mat-hint *ngIf="!groupPasswordControl.enabled">Enter a valid group name first</mat-hint>
         </mat-form-field>
 
       </form>
 
+      <!-- Inline Login Error -->
+      <div *ngIf="loginError"
+           class="w-full rounded-md border border-red-500 bg-red-500/20 text-white text-sm px-3 py-2 mb-3">
+        {{ loginError }}
+      </div>
+
       <!-- Continue Button -->
       <button class="flex transition-all duration-300 bg-secondary text-primary w-full flex-shrink-0 h-[56px]
           self-center rounded-md items-center justify-center
-         gap-3 disabled:bg-secondary/25" (click)="this.continueClicked()" [disabled]="!this.groupForm.valid">
-        <span class="font-bold">Continue</span>
-        <i class="fa-solid fa-arrow-right"></i>
+         gap-3 disabled:bg-secondary/25" (click)="this.continueClicked()" [disabled]="!this.canSubmit">
+        <mat-spinner *ngIf="this.submitting" diameter="20"></mat-spinner>
+        <span *ngIf="!this.submitting" class="font-bold">Continue</span>
+        <i *ngIf="!this.submitting" class="fa-solid fa-arrow-right"></i>
       </button>
 
     </div>
