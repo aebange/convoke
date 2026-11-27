@@ -18,20 +18,29 @@ export class ErrorInterceptor implements HttpInterceptor {
     Observable<HttpEvent<any>>
   {
     return next.handle(request).pipe(
-      catchError( (error: HttpErrorResponse) => this.handleErrorRestCall(error))
+      catchError( (error: HttpErrorResponse) => this.handleErrorRestCall(error, request.url))
     );
 
   } // end of method
 
 
-  private handleErrorRestCall(err: HttpErrorResponse): Observable<any> {
-    if (err.status < 200 || err.status >= 300) {
+  private handleErrorRestCall(err: HttpErrorResponse, requestUrl: string): Observable<any> {
+    if (this.shouldDisplayError(err, requestUrl)) {
       // A REST call raised an error.  So, send the info to the ErrorService
-      // Send the error message to the errorService
       this.errorService.addError(err);
     }
 
     // Throw the error
-    return throwError(err);
+    return throwError(() => err);
+  }
+
+  private shouldDisplayError(err: HttpErrorResponse, requestUrl: string): boolean {
+    if (err.status < 200 || err.status >= 300) {
+      // Failed logins are surfaced inline by the login dialog, not in the global error dialog
+      const isLoginRequest = requestUrl.includes('/api/auth/login');
+      return !(isLoginRequest && err.status === 401);
+    }
+
+    return false;
   }
 }
