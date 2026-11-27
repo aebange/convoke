@@ -48,7 +48,16 @@ export class ExistingGroupDialogComponent implements OnInit {
 
     this.groupNameControl.statusChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((status: string) => this.togglePassword(status));
+      .subscribe((status: string) => {
+        this.togglePassword(status);
+
+        // Surface async check failures without waiting for the field to lose focus
+        // (the password field is disabled, so there is little to blur toward).
+        if (this.groupNameControl.dirty
+          && (this.groupNameControl.hasError('groupNotFound') || this.groupNameControl.hasError('checkFailed'))) {
+          this.groupNameControl.markAsTouched();
+        }
+      });
 
     this.groupForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
