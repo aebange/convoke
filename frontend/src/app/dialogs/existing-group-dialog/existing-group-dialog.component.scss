@@ -20,3 +20,7 @@
 :host ::ng-deep .mat-mdc-form-field {
   --mdc-outlined-text-field-focus-label-text-color: #22C55E;
 }
+
+.group-name-status-spinner {
+  --mdc-circular-progress-active-indicator-color: currentColor;
+}

@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="5. Seed DB" type="NodeJSConfigurationType" path-to-js-file="$PROJECT_DIR$/scripts/seed.mjs" working-dir="$PROJECT_DIR$">
+    <method v="2" />
+  </configuration>
+</component>

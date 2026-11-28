@@ -1,0 +1,15 @@
+{
+  "_comment": "Test seed data for local/dev databases. Add scenarios here and re-run scripts/seed.mjs. The API mode hashes `password` at runtime; `passwordHash` is only used by --sql mode, so keep them in sync if you change a password (or just use the default API mode).",
+  "groups": [
+    {
+      "name": "MIKES-FRIENDS",
+      "password": "abc12345",
+      "passwordHash": "$2a$10$HnxaJhgmBn43Bu3DYyOOG.2hm1jJyFWLAY6.mXml440CFbeZ9Ri5O"
+    },
+    {
+      "name": "SECOND-GROUP",
+      "password": "xyz98765",
+      "passwordHash": "$2a$10$XK6rXuBtIPuw8lVVpz7ik.jkpqhpLxfCaquiVZRlMBfX2VubmSCj2"
+    }
+  ]
+}

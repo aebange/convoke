@@ -27,26 +27,140 @@
       <form autocomplete="off" class="flex flex-col w-full" [formGroup]="this.groupForm">
 
         <!-- Group Name Field -->
-        <mat-form-field appearance="outline" floatLabel="always" >
-          <mat-label class="!font-bold">Group Name</mat-label>
-          <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
-        </mat-form-field>
+        <div class="relative">
+          <mat-form-field appearance="outline" floatLabel="always" class="w-full">
+            <mat-label class="!font-bold">Group Name</mat-label>
+            <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS" [errorStateMatcher]="errorStateMatcher">
+
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('required')">Group name is required</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('maxlength')">Group name must be 50 characters or fewer</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('pattern')">Use letters, numbers, hyphens, or underscores</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('groupNotFound')">No group found with that name</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('checkFailed')">
+              Could not verify the group name.
+              <button type="button" class="underline font-semibold" (click)="retryGroupNameCheck()">Retry</button>
+            </mat-error>
+
+            <span matSuffix class="flex items-center">
+              <span class="flex items-center pr-4">
+                <mat-spinner *ngIf="groupNameStatus === 'pending'"
+                             diameter="18"
+                             class="group-name-status-spinner text-secondary"
+                             aria-label="Checking group name"></mat-spinner>
+
+                <button *ngIf="groupNameStatus === 'valid'"
+                        type="button"
+                        data-status-popover
+                        class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-help"
+                        [attr.aria-label]="groupNameStatusMessage"
+                        [attr.aria-expanded]="isStatusPopoverVisible('groupName')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('groupName') ? 'group-name-status-hint' : null"
+                        (pointerenter)="onStatusPointerEnter($event, 'groupName')"
+                        (pointerleave)="onStatusPointerLeave($event, 'groupName')"
+                        (pointerup)="onStatusPointerUp($event, 'groupName')">
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+
+                <button *ngIf="groupNameStatus === 'invalid'"
+                        type="button"
+                        data-status-popover
+                        class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg cursor-pointer"
+                        [attr.aria-label]="groupNameStatusMessage"
+                        [attr.aria-expanded]="isStatusPopoverVisible('groupName')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('groupName') ? 'group-name-status-hint' : null"
+                        (pointerenter)="onStatusPointerEnter($event, 'groupName')"
+                        (pointerleave)="onStatusPointerLeave($event, 'groupName')"
+                        (pointerup)="onStatusPointerUp($event, 'groupName')">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+              </span>
+            </span>
+          </mat-form-field>
+
+          <div *ngIf="isStatusPopoverVisible('groupName')"
+               id="group-name-status-hint"
+               data-status-popover
+               (pointerenter)="onPopoverPointerEnter($event)"
+               (pointerleave)="onPopoverPointerLeave($event, 'groupName')"
+               class="absolute right-4 bottom-full z-20 mb-1 max-w-[260px] rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-primary shadow-lg">
+            {{ groupNameStatusMessage }}
+            <button *ngIf="groupNameControl.hasError('checkFailed')"
+                    type="button"
+                    class="ml-1 underline"
+                    (click)="retryGroupNameCheck()">Retry</button>
+          </div>
+        </div>
 
 
         <!-- Password Field -->
-        <mat-form-field appearance="outline" floatLabel="always" >
-          <mat-label class="!font-bold">Group Password</mat-label>
-          <input matInput type="password" formControlName="groupPassword" placeholder="••••••••">
-        </mat-form-field>
+        <div class="relative">
+          <mat-form-field appearance="outline" floatLabel="always" class="w-full">
+            <mat-label class="!font-bold">Group Password</mat-label>
+            <input matInput type="password" formControlName="groupPassword" placeholder="••••••••" [errorStateMatcher]="errorStateMatcher">
+
+            <mat-error *ngIf="showInlineErrors && groupPasswordControl.invalid">{{ passwordErrorMessage }}</mat-error>
+
+            <span matSuffix class="flex items-center">
+              <span class="flex items-center pr-4">
+                <button *ngIf="passwordStatus === 'valid'"
+                        type="button"
+                        data-status-popover
+                        class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-help"
+                        [attr.aria-label]="passwordStatusMessage"
+                        [attr.aria-expanded]="isStatusPopoverVisible('password')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('password') ? 'password-status-hint' : null"
+                        (pointerenter)="onStatusPointerEnter($event, 'password')"
+                        (pointerleave)="onStatusPointerLeave($event, 'password')"
+                        (pointerup)="onStatusPointerUp($event, 'password')">
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+
+                <button *ngIf="passwordStatus === 'invalid'"
+                        type="button"
+                        data-status-popover
+                        class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg cursor-pointer"
+                        [attr.aria-label]="passwordStatusMessage"
+                        [attr.aria-expanded]="isStatusPopoverVisible('password')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('password') ? 'password-status-hint' : null"
+                        (pointerenter)="onStatusPointerEnter($event, 'password')"
+                        (pointerleave)="onStatusPointerLeave($event, 'password')"
+                        (pointerup)="onStatusPointerUp($event, 'password')">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+              </span>
+            </span>
+
+            <mat-hint *ngIf="!groupPasswordControl.enabled">Enter a valid group name first</mat-hint>
+          </mat-form-field>
+
+          <div *ngIf="isStatusPopoverVisible('password')"
+               id="password-status-hint"
+               data-status-popover
+               (pointerenter)="onPopoverPointerEnter($event)"
+               (pointerleave)="onPopoverPointerLeave($event, 'password')"
+               class="absolute right-4 bottom-full z-20 mb-1 max-w-[260px] rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-primary shadow-lg">
+            {{ passwordStatusMessage }}
+          </div>
+        </div>
+
+
+        <div class="sr-only" role="status" aria-live="polite">{{ statusAnnouncement }}</div>
 
       </form>
+
+      <!-- Inline Login Error -->
+      <div *ngIf="loginError"
+           class="w-full rounded-md border border-red-500 bg-red-500/20 text-white text-sm px-3 py-2 mb-3">
+        {{ loginError }}
+      </div>
 
       <!-- Continue Button -->
       <button class="flex transition-all duration-300 bg-secondary text-primary w-full flex-shrink-0 h-[56px]
           self-center rounded-md items-center justify-center
-         gap-3 disabled:bg-secondary/25" (click)="this.continueClicked()" [disabled]="!this.groupForm.valid">
-        <span class="font-bold">Continue</span>
-        <i class="fa-solid fa-arrow-right"></i>
+         gap-3 disabled:bg-secondary/25" (click)="this.continueClicked()" [disabled]="!this.canSubmit">
+        <mat-spinner *ngIf="this.submitting" diameter="20"></mat-spinner>
+        <span *ngIf="!this.submitting" class="font-bold">Continue</span>
+        <i *ngIf="!this.submitting" class="fa-solid fa-arrow-right"></i>
       </button>
 
     </div>

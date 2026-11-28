@@ -70,6 +70,10 @@ your shell before running. Do not commit real credentials to the repository.
 | `DB_PASSWORD`             | Database password                  | `secret`                                      |
 | `SERVER_PORT`             | Port the app listens on            | `8080`                                       |
 | `CONVOKE_CONTEXT_PATH`    | App context path                   | `/convoke`                                   |
+| `CONVOKE_JWT_SECRET`      | JWT signing key (Base64)           | `3rs1PJDRvUbfiE69leG8gCWeTF1UL9BM/CRfKCIblfE=` |
+
+`CONVOKE_JWT_SECRET` must be a Base64-encoded key of at least 256 bits. It is required in
+production; a dev-only default is used when it is unset.
 
 ---
 

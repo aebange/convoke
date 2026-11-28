@@ -8,6 +8,8 @@ import {RouterModule, Routes} from "@angular/router";
 import {NotFoundComponent} from "./errors/not-found/not-found.component";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ErrorInterceptor} from "./errorHandler/error.interceptor";
+import {AuthInterceptor} from "./interceptors/auth.interceptor";
+import {authGuard, redirectIfAuthenticatedGuard} from "./guards/auth.guard";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
@@ -57,14 +59,15 @@ import { ProfileComponent } from './features/profile/profile.component';
 // Set up the routes.  If no route is found, then take the user to the NotFoundComponent
 // NOTE:  The **ORDER** of these routes matters.  The NotFoundComponent should always be last
 const appRoutes: Routes = [
-  // Unauthenticated Routes
-  { path: '',                     component: JoinComponent },
-  { path: 'page/select-user/:groupId', component: SelectUserComponent },
+  // Public landing route (authenticated users are redirected to member selection)
+  { path: '',                     component: JoinComponent, canActivate: [redirectIfAuthenticatedGuard] },
+  { path: 'page/select-user/:groupId', component: SelectUserComponent, canActivate: [authGuard] },
 
   // Authenticated routes - rendered after login
   {
     path: 'page/:groupId',
     component: AppShellComponent,
+    canActivate: [authGuard],
     children: [
       { path: 'events',  component: EventsComponent, data: { animation: 'events' } },
       { path: 'members', component: MembersComponent, data: { animation: 'members' } },
@@ -135,6 +138,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
