@@ -50,13 +50,6 @@ export class ExistingGroupDialogComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((status: string) => {
         this.togglePassword(status);
-
-        // Surface async check failures without waiting for the field to lose focus
-        // (the password field is disabled, so there is little to blur toward).
-        if (this.groupNameControl.dirty
-          && (this.groupNameControl.hasError('groupNotFound') || this.groupNameControl.hasError('checkFailed'))) {
-          this.groupNameControl.markAsTouched();
-        }
       });
 
     this.groupForm.valueChanges
@@ -78,6 +71,52 @@ export class ExistingGroupDialogComponent implements OnInit {
     return !this.submitting
       && this.groupForm.valid
       && this.groupPasswordControl.enabled;
+  }
+
+  public get groupNameStatus(): 'none' | 'pending' | 'valid' | 'invalid' {
+    const raw = typeof this.groupNameControl.value === 'string'
+      ? this.groupNameControl.value.trim()
+      : '';
+
+    if (!raw) {
+      return 'none';
+    }
+    if (this.groupNameControl.pending) {
+      return 'pending';
+    }
+    return this.groupNameControl.valid ? 'valid' : 'invalid';
+  }
+
+  public get groupNameStatusMessage(): string {
+    const control = this.groupNameControl;
+    if (control.pending) {
+      return 'Checking group name…';
+    }
+    if (control.hasError('required')) {
+      return 'Group name is required';
+    }
+    if (control.hasError('maxlength')) {
+      return 'Group name must be 50 characters or fewer';
+    }
+    if (control.hasError('pattern')) {
+      return 'Use letters, numbers, hyphens, or underscores';
+    }
+    if (control.hasError('groupNotFound')) {
+      return 'No group found with that name';
+    }
+    if (control.hasError('checkFailed')) {
+      return 'Could not verify the group name. Tap to retry.';
+    }
+    if (control.valid) {
+      return 'Group found';
+    }
+    return '';
+  }
+
+  public onGroupNameStatusClick(): void {
+    if (this.groupNameControl.hasError('checkFailed')) {
+      this.retryGroupNameCheck();
+    }
   }
 
   public get passwordErrorMessage(): string {

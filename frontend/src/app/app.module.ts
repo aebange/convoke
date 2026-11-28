@@ -32,6 +32,7 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatTooltipModule} from "@angular/material/tooltip";
 import {AgGridModule} from "ag-grid-angular";
 import {ErrorDialogComponent} from "./errorHandler/error-dialog/error-dialog.component";
 import { ShortNumberPipe } from './utilities/short-number.pipe';
@@ -134,6 +135,7 @@ const appRoutes: Routes = [
     MatSnackBarModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes),
   ],

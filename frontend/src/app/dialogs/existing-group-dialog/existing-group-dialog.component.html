@@ -30,15 +30,33 @@
         <mat-form-field appearance="outline" floatLabel="always" >
           <mat-label class="!font-bold">Group Name</mat-label>
           <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
-          <mat-error *ngIf="groupNameControl.hasError('required')">Group name is required</mat-error>
-          <mat-error *ngIf="groupNameControl.hasError('maxlength')">Group name must be 50 characters or fewer</mat-error>
-          <mat-error *ngIf="groupNameControl.hasError('pattern')">Use letters, numbers, hyphens, or underscores</mat-error>
-          <mat-error *ngIf="groupNameControl.hasError('groupNotFound')">No group found with that name</mat-error>
-          <mat-error *ngIf="groupNameControl.hasError('checkFailed')">
-            Could not verify the group name.
-            <button type="button" class="underline font-semibold" (click)="retryGroupNameCheck()">Retry</button>
-          </mat-error>
-          <mat-hint *ngIf="groupNameControl.pending">Checking group name…</mat-hint>
+
+          <span matSuffix class="flex items-center pr-1">
+            <i *ngIf="groupNameStatus === 'pending'"
+               class="fa-solid fa-spinner fa-spin text-secondary text-lg"
+               aria-label="Checking group name"></i>
+
+            <button *ngIf="groupNameStatus === 'valid'"
+                    type="button"
+                    class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-default"
+                    [matTooltip]="groupNameStatusMessage"
+                    matTooltipPosition="above"
+                    matTooltipTouchGestures="on"
+                    [attr.aria-label]="groupNameStatusMessage">
+              <i class="fa-solid fa-circle-check"></i>
+            </button>
+
+            <button *ngIf="groupNameStatus === 'invalid'"
+                    type="button"
+                    class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg"
+                    [matTooltip]="groupNameStatusMessage"
+                    matTooltipPosition="above"
+                    matTooltipTouchGestures="on"
+                    [attr.aria-label]="groupNameStatusMessage"
+                    (click)="onGroupNameStatusClick()">
+              <i class="fa-solid fa-circle-xmark"></i>
+            </button>
+          </span>
         </mat-form-field>
 
 
