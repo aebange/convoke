@@ -38,22 +38,36 @@ java -jar backend/target/backend-1.0-SNAPSHOT-exec.jar
   `baseUrl` to `http://localhost:8080` (it currently points at a LAN IP), then
   `cd frontend && npm run start`. The packaged jar path is simpler and avoids CORS entirely.
 
-## 3. Seed a test group
+## 3. Seed test groups
 
 Password rules are **min 8 characters, at least one letter and one number** (`abc12345` qualifies).
 
-Option A — via the (permitAll) create endpoint:
+Use the seed script from the repo root (Node 18; works on Windows, macOS, and Linux):
 
 ```bash
+node scripts/seed.mjs          # through the running backend — no psql needed
+node scripts/seed.mjs --sql    # through psql (backend can be stopped; auto-locates psql.exe)
+```
+
+This creates the scenarios in `scripts/seed-data.json` and is safe to re-run:
+
+| Group | Password |
+|---|---|
+| `MIKES-FRIENDS` | `abc12345` |
+| `SECOND-GROUP` | `xyz98765` |
+
+See [`scripts/README.md`](../scripts/README.md) for all options and how to add scenarios.
+
+Manual alternatives:
+
+```bash
+# via the (permitAll) create endpoint
 curl -i -X POST http://localhost:8080/api/groups/create \
   -H 'Content-Type: application/json' \
   -d '{"name":"MIKES-FRIENDS","password":"abc12345"}'
 # expect 201 with {"id":...}
-```
 
-Option B — via SQL (as the ticket describes):
-
-```bash
+# via SQL (requires psql on PATH)
 psql -U convoke_user -d convoke_db -h localhost <<'SQL'
 create extension if not exists pgcrypto;
 insert into groups (name, password_hash)
@@ -147,8 +161,10 @@ psql -U convoke_user -d convoke_db -h localhost -c \
 
 ```bash
 psql -U convoke_user -d convoke_db -h localhost -c \
-  "delete from groups where lower(name)='mikes-friends';"
+  "delete from groups where lower(name) in ('mikes-friends','second-group');"
 ```
+
+On Windows without `psql` on `PATH`, use the full path or run the delete from pgAdmin/IntelliJ.
 
 In the browser: DevTools → Application → Local Storage → remove `convoke.jwt`.
 Stop the jar with Ctrl-C.
