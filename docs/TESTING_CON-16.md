@@ -34,9 +34,9 @@ java -jar backend/target/backend-1.0-SNAPSHOT-exec.jar
     --app.datasource.password=secret
   ```
 
-- Dev alternative (`ng serve`): set `frontend/src/environments/environment.development.ts`
-  `baseUrl` to `http://localhost:8080` (it currently points at a LAN IP), then
-  `cd frontend && npm run start`. The packaged jar path is simpler and avoids CORS entirely.
+- Dev alternative (`ng serve`): `environment.development.ts` derives `baseUrl` from the host the
+  browser used (`<current-host>:8080`), so it works via `localhost` or a LAN IP with no edits.
+  Run `cd frontend && npm run start`. The packaged jar path is simpler and avoids CORS entirely.
 
 ## 3. Seed test groups
 
