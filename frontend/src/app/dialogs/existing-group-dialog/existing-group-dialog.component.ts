@@ -1,4 +1,4 @@
-import {Component, DestroyRef, OnInit} from '@angular/core';
+import {Component, DestroyRef, HostListener, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -22,6 +22,7 @@ export class ExistingGroupDialogComponent implements OnInit {
   public groupForm: FormGroup;
   public submitting = false;
   public loginError: string | null = null;
+  public statusPopoverOpen = false;
 
   public constructor(
     private dialogRef: MatDialogRef<ExistingGroupDialogComponent>,
@@ -56,6 +57,7 @@ export class ExistingGroupDialogComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.loginError = null;
+        this.statusPopoverOpen = false;
       });
   }
 
@@ -109,10 +111,31 @@ export class ExistingGroupDialogComponent implements OnInit {
     return '';
   }
 
-  public onGroupNameStatusClick(): void {
-    if (this.groupNameControl.hasError('checkFailed')) {
-      this.retryGroupNameCheck();
+  public onStatusPointerEnter(event: Event): void {
+    if ((event as PointerEvent).pointerType === 'mouse') {
+      this.statusPopoverOpen = true;
     }
+  }
+
+  public onStatusPointerLeave(event: Event): void {
+    if ((event as PointerEvent).pointerType === 'mouse') {
+      this.statusPopoverOpen = false;
+    }
+  }
+
+  public onStatusPointerUp(event: Event): void {
+    if ((event as PointerEvent).pointerType !== 'mouse') {
+      this.statusPopoverOpen = !this.statusPopoverOpen;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  public onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement | null;
+    if (target?.closest('[data-group-name-status]')) {
+      return;
+    }
+    this.statusPopoverOpen = false;
   }
 
   public get passwordErrorMessage(): string {

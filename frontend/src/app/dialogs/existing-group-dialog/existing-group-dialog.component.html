@@ -27,40 +27,60 @@
       <form autocomplete="off" class="flex flex-col w-full" [formGroup]="this.groupForm">
 
         <!-- Group Name Field -->
-        <mat-form-field appearance="outline" floatLabel="always" >
-          <mat-label class="!font-bold">Group Name</mat-label>
-          <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
+        <div class="relative">
+          <mat-form-field appearance="outline" floatLabel="always" >
+            <mat-label class="!font-bold">Group Name</mat-label>
+            <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
 
-          <span matSuffix class="flex items-center pr-1">
-            <i *ngIf="groupNameStatus === 'pending'"
-               class="fa-solid fa-spinner fa-spin text-secondary text-lg"
-               [matTooltip]="groupNameStatusMessage"
-               matTooltipPosition="above"
-               matTooltipTouchGestures="on"
-               [attr.aria-label]="groupNameStatusMessage"></i>
+            <span matSuffix class="flex items-center">
+              <span class="flex items-center pr-4">
+                <mat-spinner *ngIf="groupNameStatus === 'pending'"
+                             diameter="18"
+                             class="group-name-status-spinner"
+                             aria-label="Checking group name"></mat-spinner>
 
-            <button *ngIf="groupNameStatus === 'valid'"
+                <button *ngIf="groupNameStatus === 'valid'"
+                        type="button"
+                        data-group-name-status
+                        class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-help"
+                        [attr.aria-label]="groupNameStatusMessage"
+                        [attr.aria-expanded]="statusPopoverOpen"
+                        [attr.aria-describedby]="statusPopoverOpen ? 'group-name-status-hint' : null"
+                        (pointerenter)="onStatusPointerEnter($event)"
+                        (pointerleave)="onStatusPointerLeave($event)"
+                        (pointerup)="onStatusPointerUp($event)">
+                  <i class="fa-solid fa-circle-check"></i>
+                </button>
+
+                <button *ngIf="groupNameStatus === 'invalid'"
+                        type="button"
+                        data-group-name-status
+                        class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg cursor-pointer"
+                        [attr.aria-label]="groupNameStatusMessage"
+                        [attr.aria-expanded]="statusPopoverOpen"
+                        [attr.aria-describedby]="statusPopoverOpen ? 'group-name-status-hint' : null"
+                        (pointerenter)="onStatusPointerEnter($event)"
+                        (pointerleave)="onStatusPointerLeave($event)"
+                        (pointerup)="onStatusPointerUp($event)">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+              </span>
+            </span>
+          </mat-form-field>
+
+          <div *ngIf="statusPopoverOpen && groupNameStatus !== 'none'"
+               id="group-name-status-hint"
+               data-group-name-status
+               role="status"
+               aria-live="polite"
+               class="absolute right-4 bottom-full z-20 mb-1 max-w-[260px] rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-primary shadow-lg">
+            {{ groupNameStatusMessage }}
+            <button *ngIf="groupNameControl.hasError('checkFailed')"
                     type="button"
-                    class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-default"
-                    [matTooltip]="groupNameStatusMessage"
-                    matTooltipPosition="above"
-                    matTooltipTouchGestures="on"
-                    [attr.aria-label]="groupNameStatusMessage">
-              <i class="fa-solid fa-circle-check"></i>
-            </button>
-
-            <button *ngIf="groupNameStatus === 'invalid'"
-                    type="button"
-                    class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg"
-                    [matTooltip]="groupNameStatusMessage"
-                    matTooltipPosition="above"
-                    matTooltipTouchGestures="on"
-                    [attr.aria-label]="groupNameStatusMessage"
-                    (click)="onGroupNameStatusClick()">
-              <i class="fa-solid fa-circle-xmark"></i>
-            </button>
-          </span>
-        </mat-form-field>
+                    class="ml-1 underline"
+                    (click)="retryGroupNameCheck()">Retry</button>
+          </div>
+        </div>
 
 
         <!-- Password Field -->
