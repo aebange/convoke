@@ -1,7 +1,8 @@
 import {Component, DestroyRef, HostListener, OnInit} from '@angular/core';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
+import {ErrorStateMatcher} from '@angular/material/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AuthService} from '../../services/auth.service';
@@ -11,6 +12,12 @@ import {
   passwordContainsNumber,
   passwordMinLength
 } from '../../utilities/validators';
+
+class ShowOnDirtyErrorStateMatcher implements ErrorStateMatcher {
+  public isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    return !!control && control.invalid && (control.dirty || control.touched || !!form?.submitted);
+  }
+}
 
 @Component({
   selector: 'app-existing-group-dialog',
@@ -23,9 +30,12 @@ export class ExistingGroupDialogComponent implements OnInit {
   public submitting = false;
   public loginError: string | null = null;
   public openPopover: 'groupName' | 'password' | null = null;
-  public readonly isTouchOnly = typeof window !== 'undefined'
-    && window.matchMedia('(hover: none)').matches;
+  public isTouchOnly = false;
+  public showInlineErrors = false;
+  public readonly errorStateMatcher = new ShowOnDirtyErrorStateMatcher();
   private popoverCloseTimer: ReturnType<typeof setTimeout> | null = null;
+  private touchOnlyMedia: MediaQueryList | null = null;
+  private inlineErrorMedia: MediaQueryList | null = null;
 
   public constructor(
     private dialogRef: MatDialogRef<ExistingGroupDialogComponent>,
@@ -63,7 +73,32 @@ export class ExistingGroupDialogComponent implements OnInit {
         this.openPopover = null;
       });
 
+    this.setupResponsiveFlags();
+
     this.destroyRef.onDestroy(() => this.cancelPopoverClose());
+  }
+
+  private setupResponsiveFlags(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    this.touchOnlyMedia = window.matchMedia('(hover: none)');
+    this.inlineErrorMedia = window.matchMedia('(hover: hover), (min-height: 640px)');
+
+    const sync = (): void => {
+      this.isTouchOnly = this.touchOnlyMedia?.matches ?? false;
+      this.showInlineErrors = this.inlineErrorMedia?.matches ?? false;
+    };
+
+    sync();
+    this.touchOnlyMedia.addEventListener('change', sync);
+    this.inlineErrorMedia.addEventListener('change', sync);
+
+    this.destroyRef.onDestroy(() => {
+      this.touchOnlyMedia?.removeEventListener('change', sync);
+      this.inlineErrorMedia?.removeEventListener('change', sync);
+    });
   }
 
   public get groupNameControl(): FormControl {
@@ -117,18 +152,33 @@ export class ExistingGroupDialogComponent implements OnInit {
   }
 
   public isStatusPopoverVisible(field: 'groupName' | 'password'): boolean {
-    const status = field === 'groupName' ? this.groupNameStatus : this.passwordStatus;
-    if (status === 'none') {
-      return false;
+    return this.activeStatusField === field;
+  }
+
+  private get activeStatusField(): 'groupName' | 'password' | null {
+    if (this.openPopover !== null) {
+      return this.openPopover;
     }
-    return this.openPopover === field || (this.isTouchOnly && status === 'invalid');
+    if (this.showInlineErrors || !this.isTouchOnly) {
+      return null;
+    }
+
+    const groupNameStatus = this.groupNameStatus;
+    if (groupNameStatus === 'invalid' || groupNameStatus === 'pending') {
+      return 'groupName';
+    }
+    if (this.passwordStatus === 'invalid') {
+      return 'password';
+    }
+    return null;
   }
 
   public get statusAnnouncement(): string {
-    if (this.isStatusPopoverVisible('groupName')) {
+    const active = this.activeStatusField;
+    if (active === 'groupName') {
       return this.groupNameStatusMessage;
     }
-    if (this.isStatusPopoverVisible('password')) {
+    if (active === 'password') {
       return this.passwordStatusMessage;
     }
     return '';
@@ -233,8 +283,11 @@ export class ExistingGroupDialogComponent implements OnInit {
   }
 
   public retryGroupNameCheck(): void {
+    const popoverWasActive = this.isStatusPopoverVisible('groupName');
     this.cancelPopoverClose();
-    this.openPopover = 'groupName';
+    if (popoverWasActive) {
+      this.openPopover = 'groupName';
+    }
     this.groupNameControl.updateValueAndValidity();
   }
 

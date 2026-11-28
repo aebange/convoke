@@ -30,7 +30,16 @@
         <div class="relative">
           <mat-form-field appearance="outline" floatLabel="always" class="w-full">
             <mat-label class="!font-bold">Group Name</mat-label>
-            <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
+            <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS" [errorStateMatcher]="errorStateMatcher">
+
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('required')">Group name is required</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('maxlength')">Group name must be 50 characters or fewer</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('pattern')">Use letters, numbers, hyphens, or underscores</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('groupNotFound')">No group found with that name</mat-error>
+            <mat-error *ngIf="showInlineErrors && groupNameControl.hasError('checkFailed')">
+              Could not verify the group name.
+              <button type="button" class="underline font-semibold" (click)="retryGroupNameCheck()">Retry</button>
+            </mat-error>
 
             <span matSuffix class="flex items-center">
               <span class="flex items-center pr-4">
@@ -87,7 +96,9 @@
         <div class="relative">
           <mat-form-field appearance="outline" floatLabel="always" class="w-full">
             <mat-label class="!font-bold">Group Password</mat-label>
-            <input matInput type="password" formControlName="groupPassword" placeholder="••••••••">
+            <input matInput type="password" formControlName="groupPassword" placeholder="••••••••" [errorStateMatcher]="errorStateMatcher">
+
+            <mat-error *ngIf="showInlineErrors && groupPasswordControl.invalid">{{ passwordErrorMessage }}</mat-error>
 
             <span matSuffix class="flex items-center">
               <span class="flex items-center pr-4">
