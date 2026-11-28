@@ -23,6 +23,9 @@ export class ExistingGroupDialogComponent implements OnInit {
   public submitting = false;
   public loginError: string | null = null;
   public openPopover: 'groupName' | 'password' | null = null;
+  public readonly isTouchOnly = typeof window !== 'undefined'
+    && window.matchMedia('(hover: none)').matches;
+  private popoverCloseTimer: ReturnType<typeof setTimeout> | null = null;
 
   public constructor(
     private dialogRef: MatDialogRef<ExistingGroupDialogComponent>,
@@ -59,6 +62,8 @@ export class ExistingGroupDialogComponent implements OnInit {
         this.loginError = null;
         this.openPopover = null;
       });
+
+    this.destroyRef.onDestroy(() => this.cancelPopoverClose());
   }
 
   public get groupNameControl(): FormControl {
@@ -111,16 +116,37 @@ export class ExistingGroupDialogComponent implements OnInit {
     return '';
   }
 
-  public onStatusPointerEnter(event: Event, field: 'groupName' | 'password'): void {
-    if ((event as PointerEvent).pointerType === 'mouse') {
-      this.openPopover = field;
+  public isStatusPopoverVisible(field: 'groupName' | 'password'): boolean {
+    const status = field === 'groupName' ? this.groupNameStatus : this.passwordStatus;
+    if (status === 'none') {
+      return false;
     }
+    return this.openPopover === field || (this.isTouchOnly && status === 'invalid');
+  }
+
+  public get statusAnnouncement(): string {
+    if (this.isStatusPopoverVisible('groupName')) {
+      return this.groupNameStatusMessage;
+    }
+    if (this.isStatusPopoverVisible('password')) {
+      return this.passwordStatusMessage;
+    }
+    return '';
+  }
+
+  public onStatusPointerEnter(event: Event, field: 'groupName' | 'password'): void {
+    if ((event as PointerEvent).pointerType !== 'mouse') {
+      return;
+    }
+    this.cancelPopoverClose();
+    this.openPopover = field;
   }
 
   public onStatusPointerLeave(event: Event, field: 'groupName' | 'password'): void {
-    if ((event as PointerEvent).pointerType === 'mouse' && this.openPopover === field) {
-      this.openPopover = null;
+    if ((event as PointerEvent).pointerType !== 'mouse') {
+      return;
     }
+    this.schedulePopoverClose(field);
   }
 
   public onStatusPointerUp(event: Event, field: 'groupName' | 'password'): void {
@@ -130,13 +156,43 @@ export class ExistingGroupDialogComponent implements OnInit {
     this.openPopover = this.openPopover === field ? null : field;
   }
 
+  public onPopoverPointerEnter(event: Event): void {
+    if ((event as PointerEvent).pointerType === 'mouse') {
+      this.cancelPopoverClose();
+    }
+  }
+
+  public onPopoverPointerLeave(event: Event, field: 'groupName' | 'password'): void {
+    if ((event as PointerEvent).pointerType === 'mouse') {
+      this.schedulePopoverClose(field);
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   public onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement | null;
     if (target?.closest('[data-status-popover]')) {
       return;
     }
+    this.cancelPopoverClose();
     this.openPopover = null;
+  }
+
+  private schedulePopoverClose(field: 'groupName' | 'password'): void {
+    this.cancelPopoverClose();
+    this.popoverCloseTimer = setTimeout(() => {
+      this.popoverCloseTimer = null;
+      if (this.openPopover === field) {
+        this.openPopover = null;
+      }
+    }, 250);
+  }
+
+  private cancelPopoverClose(): void {
+    if (this.popoverCloseTimer !== null) {
+      clearTimeout(this.popoverCloseTimer);
+      this.popoverCloseTimer = null;
+    }
   }
 
   public get passwordErrorMessage(): string {
@@ -177,6 +233,8 @@ export class ExistingGroupDialogComponent implements OnInit {
   }
 
   public retryGroupNameCheck(): void {
+    this.cancelPopoverClose();
+    this.openPopover = 'groupName';
     this.groupNameControl.updateValueAndValidity();
   }
 

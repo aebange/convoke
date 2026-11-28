@@ -28,7 +28,7 @@
 
         <!-- Group Name Field -->
         <div class="relative">
-          <mat-form-field appearance="outline" floatLabel="always" >
+          <mat-form-field appearance="outline" floatLabel="always" class="w-full">
             <mat-label class="!font-bold">Group Name</mat-label>
             <input matInput formControlName="groupName" placeholder="e.g. MIKES-FRIENDS">
 
@@ -36,7 +36,7 @@
               <span class="flex items-center pr-4">
                 <mat-spinner *ngIf="groupNameStatus === 'pending'"
                              diameter="18"
-                             class="group-name-status-spinner"
+                             class="group-name-status-spinner text-secondary"
                              aria-label="Checking group name"></mat-spinner>
 
                 <button *ngIf="groupNameStatus === 'valid'"
@@ -44,8 +44,8 @@
                         data-status-popover
                         class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-help"
                         [attr.aria-label]="groupNameStatusMessage"
-                        [attr.aria-expanded]="openPopover === 'groupName'"
-                        [attr.aria-describedby]="openPopover === 'groupName' ? 'group-name-status-hint' : null"
+                        [attr.aria-expanded]="isStatusPopoverVisible('groupName')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('groupName') ? 'group-name-status-hint' : null"
                         (pointerenter)="onStatusPointerEnter($event, 'groupName')"
                         (pointerleave)="onStatusPointerLeave($event, 'groupName')"
                         (pointerup)="onStatusPointerUp($event, 'groupName')">
@@ -57,8 +57,8 @@
                         data-status-popover
                         class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg cursor-pointer"
                         [attr.aria-label]="groupNameStatusMessage"
-                        [attr.aria-expanded]="openPopover === 'groupName'"
-                        [attr.aria-describedby]="openPopover === 'groupName' ? 'group-name-status-hint' : null"
+                        [attr.aria-expanded]="isStatusPopoverVisible('groupName')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('groupName') ? 'group-name-status-hint' : null"
                         (pointerenter)="onStatusPointerEnter($event, 'groupName')"
                         (pointerleave)="onStatusPointerLeave($event, 'groupName')"
                         (pointerup)="onStatusPointerUp($event, 'groupName')">
@@ -68,11 +68,11 @@
             </span>
           </mat-form-field>
 
-          <div *ngIf="openPopover === 'groupName' && groupNameStatus !== 'none'"
+          <div *ngIf="isStatusPopoverVisible('groupName')"
                id="group-name-status-hint"
                data-status-popover
-               role="status"
-               aria-live="polite"
+               (pointerenter)="onPopoverPointerEnter($event)"
+               (pointerleave)="onPopoverPointerLeave($event, 'groupName')"
                class="absolute right-4 bottom-full z-20 mb-1 max-w-[260px] rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-primary shadow-lg">
             {{ groupNameStatusMessage }}
             <button *ngIf="groupNameControl.hasError('checkFailed')"
@@ -85,7 +85,7 @@
 
         <!-- Password Field -->
         <div class="relative">
-          <mat-form-field appearance="outline" floatLabel="always" >
+          <mat-form-field appearance="outline" floatLabel="always" class="w-full">
             <mat-label class="!font-bold">Group Password</mat-label>
             <input matInput type="password" formControlName="groupPassword" placeholder="••••••••">
 
@@ -96,8 +96,8 @@
                         data-status-popover
                         class="flex items-center bg-transparent border-0 p-0 m-0 text-secondary text-lg cursor-help"
                         [attr.aria-label]="passwordStatusMessage"
-                        [attr.aria-expanded]="openPopover === 'password'"
-                        [attr.aria-describedby]="openPopover === 'password' ? 'password-status-hint' : null"
+                        [attr.aria-expanded]="isStatusPopoverVisible('password')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('password') ? 'password-status-hint' : null"
                         (pointerenter)="onStatusPointerEnter($event, 'password')"
                         (pointerleave)="onStatusPointerLeave($event, 'password')"
                         (pointerup)="onStatusPointerUp($event, 'password')">
@@ -109,8 +109,8 @@
                         data-status-popover
                         class="flex items-center bg-transparent border-0 p-0 m-0 text-red-500 text-lg cursor-pointer"
                         [attr.aria-label]="passwordStatusMessage"
-                        [attr.aria-expanded]="openPopover === 'password'"
-                        [attr.aria-describedby]="openPopover === 'password' ? 'password-status-hint' : null"
+                        [attr.aria-expanded]="isStatusPopoverVisible('password')"
+                        [attr.aria-describedby]="isStatusPopoverVisible('password') ? 'password-status-hint' : null"
                         (pointerenter)="onStatusPointerEnter($event, 'password')"
                         (pointerleave)="onStatusPointerLeave($event, 'password')"
                         (pointerup)="onStatusPointerUp($event, 'password')">
@@ -122,15 +122,18 @@
             <mat-hint *ngIf="!groupPasswordControl.enabled">Enter a valid group name first</mat-hint>
           </mat-form-field>
 
-          <div *ngIf="openPopover === 'password' && passwordStatus !== 'none'"
+          <div *ngIf="isStatusPopoverVisible('password')"
                id="password-status-hint"
                data-status-popover
-               role="status"
-               aria-live="polite"
+               (pointerenter)="onPopoverPointerEnter($event)"
+               (pointerleave)="onPopoverPointerLeave($event, 'password')"
                class="absolute right-4 bottom-full z-20 mb-1 max-w-[260px] rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-primary shadow-lg">
             {{ passwordStatusMessage }}
           </div>
         </div>
+
+
+        <div class="sr-only" role="status" aria-live="polite">{{ statusAnnouncement }}</div>
 
       </form>
 
