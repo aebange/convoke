@@ -22,7 +22,7 @@ export class ExistingGroupDialogComponent implements OnInit {
   public groupForm: FormGroup;
   public submitting = false;
   public loginError: string | null = null;
-  public statusPopoverOpen = false;
+  public openPopover: 'groupName' | 'password' | null = null;
 
   public constructor(
     private dialogRef: MatDialogRef<ExistingGroupDialogComponent>,
@@ -57,7 +57,7 @@ export class ExistingGroupDialogComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.loginError = null;
-        this.statusPopoverOpen = false;
+        this.openPopover = null;
       });
   }
 
@@ -111,31 +111,32 @@ export class ExistingGroupDialogComponent implements OnInit {
     return '';
   }
 
-  public onStatusPointerEnter(event: Event): void {
+  public onStatusPointerEnter(event: Event, field: 'groupName' | 'password'): void {
     if ((event as PointerEvent).pointerType === 'mouse') {
-      this.statusPopoverOpen = true;
+      this.openPopover = field;
     }
   }
 
-  public onStatusPointerLeave(event: Event): void {
-    if ((event as PointerEvent).pointerType === 'mouse') {
-      this.statusPopoverOpen = false;
+  public onStatusPointerLeave(event: Event, field: 'groupName' | 'password'): void {
+    if ((event as PointerEvent).pointerType === 'mouse' && this.openPopover === field) {
+      this.openPopover = null;
     }
   }
 
-  public onStatusPointerUp(event: Event): void {
-    if ((event as PointerEvent).pointerType !== 'mouse') {
-      this.statusPopoverOpen = !this.statusPopoverOpen;
+  public onStatusPointerUp(event: Event, field: 'groupName' | 'password'): void {
+    if ((event as PointerEvent).pointerType === 'mouse') {
+      return;
     }
+    this.openPopover = this.openPopover === field ? null : field;
   }
 
   @HostListener('document:click', ['$event'])
   public onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement | null;
-    if (target?.closest('[data-group-name-status]')) {
+    if (target?.closest('[data-status-popover]')) {
       return;
     }
-    this.statusPopoverOpen = false;
+    this.openPopover = null;
   }
 
   public get passwordErrorMessage(): string {
@@ -153,6 +154,26 @@ export class ExistingGroupDialogComponent implements OnInit {
       return 'Password must include a number';
     }
     return '';
+  }
+
+  public get passwordStatus(): 'none' | 'valid' | 'invalid' {
+    const control = this.groupPasswordControl;
+
+    if (!control.enabled) {
+      return 'none';
+    }
+    const value = control.value;
+    const hasValue = typeof value === 'string' && value.length > 0;
+    if (!hasValue) {
+      return 'none';
+    }
+    return control.valid ? 'valid' : 'invalid';
+  }
+
+  public get passwordStatusMessage(): string {
+    return this.groupPasswordControl.valid
+      ? 'Password meets the requirements'
+      : this.passwordErrorMessage;
   }
 
   public retryGroupNameCheck(): void {
