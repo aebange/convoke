@@ -34,7 +34,10 @@
           <span matSuffix class="flex items-center pr-1">
             <i *ngIf="groupNameStatus === 'pending'"
                class="fa-solid fa-spinner fa-spin text-secondary text-lg"
-               aria-label="Checking group name"></i>
+               [matTooltip]="groupNameStatusMessage"
+               matTooltipPosition="above"
+               matTooltipTouchGestures="on"
+               [attr.aria-label]="groupNameStatusMessage"></i>
 
             <button *ngIf="groupNameStatus === 'valid'"
                     type="button"

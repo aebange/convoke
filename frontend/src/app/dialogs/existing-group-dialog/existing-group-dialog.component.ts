@@ -74,11 +74,10 @@ export class ExistingGroupDialogComponent implements OnInit {
   }
 
   public get groupNameStatus(): 'none' | 'pending' | 'valid' | 'invalid' {
-    const raw = typeof this.groupNameControl.value === 'string'
-      ? this.groupNameControl.value.trim()
-      : '';
+    const value = this.groupNameControl.value;
+    const hasValue = typeof value === 'string' && value.length > 0;
 
-    if (!raw) {
+    if (!hasValue) {
       return 'none';
     }
     if (this.groupNameControl.pending) {
@@ -91,9 +90,6 @@ export class ExistingGroupDialogComponent implements OnInit {
     const control = this.groupNameControl;
     if (control.pending) {
       return 'Checking group name…';
-    }
-    if (control.hasError('required')) {
-      return 'Group name is required';
     }
     if (control.hasError('maxlength')) {
       return 'Group name must be 50 characters or fewer';
